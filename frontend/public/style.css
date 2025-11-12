@@ -1,7 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Mitr:wght@200;400;600&display=swap");
 
+/* --- Body & App --- */
 body {
   font-family: "Mitr", sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f8f9fa;
 }
 
 #app-name {
@@ -11,8 +15,9 @@ body {
   text-align: center;
 }
 
+/* --- Sections --- */
 section {
-  margin: 20px 0;
+  margin: 20px;
 }
 
 .section-title {
@@ -27,123 +32,144 @@ section {
   line-height: 80%;
 }
 
-#member-list {
-  margin: 0;
-  font-size: 0.8em;
-}
-
-#member-list div {
+/* --- Movie Search --- */
+.movie-search-container {
   display: flex;
-  align-items: center;
-  margin: 4px 0px;
-  column-gap: 4px;
+  flex-direction: column;
+  gap: 12px;
 }
 
-#main-table {
-  padding: 0;
-  width: 100%;
-  background: #eee;
-  border-radius: 8px;
-  box-shadow: 1px 1px 1px 0 rgba(0, 0, 0, 0.1);
-  border-collapse: collapse;
-  overflow: hidden;
+.movie-search-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
 }
 
-#main-table > thead {
-  background: #555;
-  color: white;
+.movie-search-row > div {
+  display: flex;
+  flex-direction: column;
 }
 
-#main-table > thead > tr > th {
-  font-weight: lighter;
-  text-align: left;
-}
-
-#main-table td,
-#main-table th {
-  padding: 5px 10px;
-  font-weight: lighter;
-}
-
-#main-table input,
-#main-table select,
-#filter-name,
-#lower-price,
-#upper-price,
-#member-name-to-add {
+#movie-search-input,
+#movie-category,
+#movie-tags {
   padding: 5px 10px;
   border-radius: 8px;
   border: 1px solid #aaa;
+  min-width: 200px;
 }
 
-
-#main-table button,
-#add-member,
-#member-list button {
+#movie-search-button {
+  height: 30px;
   border-radius: 8px;
   padding: 5px 10px;
   border: 1px solid #aaa;
   background: white;
-  width: 60px;
   cursor: pointer;
 }
 
-#main-table button:hover,
-#add-member:hover,
-#member-list button:hover {
+#movie-search-button:hover {
   background: rgb(255, 200, 105);
   color: white;
 }
 
-#filter-button {
-  color: black;
+/* --- Selected Tags --- */
+#selected-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* --- Review Section --- */
+.review-container {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 16px;
+  background: #fff;
+  border: 1px solid #dee2e6;
   border-radius: 8px;
-  padding: 5px 10px;
-  border: 1px solid #aaa;
-  background: white;
-  width: 60px;
+  padding: 12px;
+}
+
+.review-container input,
+.review-container select {
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+#review-movie-title {
+  flex: 2;
+}
+
+#review-rating {
+  flex: 1;
+}
+
+#review-text {
+  flex: 4;
+}
+
+#submit-review {
+  padding: 8px 16px;
+  background-color: #ffd966;
+  color: #333;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
 }
 
-#filter-button:hover {
-  color: white;
-  animation: filtering 10s infinite linear;
+#submit-review:hover {
+  background-color: #f0c040;
 }
 
-@keyframes filtering {
-  0% {
-    background: #ff0000;
-  }
+/* --- Reviews Feed --- */
+.reviews-container {
+  margin-top: 12px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 16px;
+  min-height: 200px;
+  background: #fff;
+}
 
-  12.5% {
-    background: #ffa500;
-  }
+#movie-reviews {
+  margin-top: 16px;
+}
 
-  25% {
-    background: #ffff00;
-  }
+.message {
+  color: #6c757d;
+  text-align: center;
+}
 
-  37.5% {
-    background: #008000;
-  }
+/* --- Tags Style --- */
+.tag {
+  display: inline-flex;   /* fit width to content */
+  align-items: center;
+  background-color: #ffd966;
+  color: #333;
+  font-size: 0.9em;
+  padding: 4px 8px;
+  border-radius: 16px;
+  border: 1px solid #f0c040;
+  white-space: nowrap;    /* prevent text wrapping inside a tag */
+  cursor: default;
+}
 
-  50% {
-    background: #0000ff;
-  }
+.tag button.tag-delete-btn {
+  margin-left: 6px;
+  background: transparent;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  color: #555;
+  font-size: 0.9em;
+  line-height: 1;
+  padding: 0;
+}
 
-  62.5% {
-    background: #4b0082;
-  }
-
-  75% {
-    background: purple;
-  }
-
-  87.5% {
-    background: #ee82ee;
-  }
-
-  100% {
-    background: #ff0000;
-  }
+.tag button.tag-delete-btn:hover {
+  color: #000;
 }

@@ -2,58 +2,103 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>ฝากซื้อด้วย</title>
+    <title>FilmTweet</title>
     <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
-    <section>
-      <header><h1 id="app-name">ฝากซื้อด้วย</h1></header>
-    </section>
-
+    <!-- App Header -->
     <section>
       <header>
-        <h2 class="section-title">รายชื่อผู้มีสิทธิฝากซื้อ</h2>
-        <span class="section-subtitle">(ชื่อคนในกลุ่มที่มาร่วมทำวันนี้)</span>
+        <h1 id="app-name">FilmTweet</h1>
       </header>
-      <ul id="member-list"></ul>
-      <input id="member-name-to-add" />
-      <button id="add-member">จ้าง</button>
-
-      <h2 class="section-title">ตัวกรองรายการฝากซื้อ</h2>
-      <select id="filter-name"></select>
-      <input id="lower-price" type="number" placeholder="$ MIN"/>
-      <input id="upper-price" type="number" placeholder="$ MAX"/>
-      <button id="filter-button">กรอง</button>
     </section>
 
+    <!-- Movie Search Section -->
     <section>
-      <header><h2 class="section-title">รายการฝากซื้อ</h2></header>
-      <table id="main-table">
-        <thead>
-          <tr>
-            <th>ของที่ฝากซื้อ</th>
-            <th>ชื่อผู้ฝากซื้อ</th>
-            <th>ราคา (บาท)</th>
-            <th>ดำเนินการ</th>
-          </tr>
-        </thead>
+      <header>
+        <h2 class="section-title">Search your movie :D</h2>
+      </header>
 
-        <tbody id="main-table-body"></tbody>
+      <div class="movie-search-container">
+        <div class="movie-search-row">
+          <!-- Search input -->
+          <div>
+            <label for="movie-search-input">Search:</label>
+            <input id="movie-search-input" placeholder="Enter movie title" />
+          </div>
 
-        <tfoot>
-          <tr id="newrow-form">
-            <td><input id="item-to-add" type="text" /></td>
-            <td>
-              <select id="name-to-add"></select>
-            </td>
-            <td><input id="price-to-add" type="number" /></td>
-            <td><button id="add-newrow">เพิ่ม</button></td>
-          </tr>
-        </tfoot>
-      </table>
+          <!-- Category select -->
+          <div>
+            <label for="movie-category">Type:</label>
+            <select id="movie-category">
+              <option value="all">All Types</option>
+              <option value="movie">Movies</option>
+              <option value="anime">Anime</option>
+              <option value="series">TV Series</option>
+            </select>
+          </div>
+
+          <!-- Tags select -->
+          <div>
+              <label for="movie-tags">Tags:</label>
+              <select id="movie-tags">
+                <option value="">Select tags...</option>
+                <option value="action">Action</option>
+                <option value="adventure">Adventure</option>
+                <option value="animation">Animation</option>
+                <option value="comedy">Comedy</option>
+                <option value="crime">Crime</option>
+                <option value="documentary">Documentary</option>
+                <option value="drama">Drama</option>
+                <option value="family">Family</option>
+                <option value="fantasy">Fantasy</option>
+                <option value="horror">Horror</option>
+                <option value="mystery">Mystery</option>
+                <option value="romance">Romance</option>
+                <option value="sci-fi">Sci-Fi</option>
+                <option value="thriller">Thriller</option>
+              </select>
+          </div>
+          
+          <!-- search button -->
+          <div>
+            <button id="movie-search-button">Search</button>
+          </div>
+        </div>
+        
+        <!-- Selected tags -->
+        <div id="selected-tags"></div>
+      </div>
     </section>
 
-    <script type="module" src="scripts/main.js"></script>
+    <!-- User Review Section -->
+    <section>
+      <div class="review-container">
+        <span>Share yours:</span>
+        <input id="review-movie-title" placeholder="Movie title" />
+        <select id="review-rating">
+          <option value="">Rating</option>
+          <option value="5">⭐⭐⭐⭐⭐</option>
+          <option value="4">⭐⭐⭐⭐</option>
+          <option value="3">⭐⭐⭐</option>
+          <option value="2">⭐⭐</option>
+          <option value="1">⭐</option>
+        </select>
+        <input id="review-text" placeholder="Share your thoughts..." />
+        <button id="submit-review">Post</button>
+      </div>
+    </section>
+
+    <!-- Reviews Feed Section -->
+    <section>
+      <div class="reviews-container">
+        <div id="movie-reviews">
+          <div class="message">Search for a movie to see reviews</div>
+        </div>
+      </div>
+    </section>
+
+    <script type="module" src="scripts/app.js"></script>
   </body>
 </html>

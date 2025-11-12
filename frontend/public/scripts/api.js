@@ -2,51 +2,45 @@ import { BACKEND_URL } from "./config.js";
 
 export async function getItems() {
   const items = await fetch(`${BACKEND_URL}/items`).then((r) => r.json());
-
   return items;
 }
 
-export async function createItem(item) {
-  await fetch(`${BACKEND_URL}/items`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(item),
-  });
+export async function getMovieReviews({ title = '', category = 'all', tags = [] }) {
+  const params = new URLSearchParams();
+  if (title) params.set('title', title.trim());
+  if (category && category !== 'all') params.set('category', category);
+  if (tags && tags.length > 0) params.set('tags', tags.join(','));
+
+  try {
+    const response = await fetch(`${BACKEND_URL}/reviews?${params.toString()}`);
+    if (!response.ok) throw new Error(`Server returned ${response.status}`);
+    const data = await response.json();
+
+    // sort by most recent if your review object has `createdAt`
+    return data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  } catch (error) {
+    console.error('Failed to fetch reviews:', error);
+    return [];
+  }
 }
 
-export async function editItem(id, item) {
-  await fetch(`${BACKEND_URL}/items/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(item),
-  });
-}
+// Create a new item/tag and send to backend
+export async function createItem(payload) {
+  try {
+    const response = await fetch(`${BACKEND_URL}/items`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
 
-export async function deleteItem(id) {
-  await fetch(`${BACKEND_URL}/items/${id}`, {
-    method: "DELETE",
-  });
-}
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.error || "Failed to create item");
+    }
 
-export async function filterItems(filterName, lowerPrice, upperPrice) {
-  // TODO3: implement this function
-  // You may need to understand handleFilterItem() function in ./table.js before implementing this function.
-  return /* return the filted items */;
-}
-
-export async function getMembers() {
-  // TODO4: implement this function
-  return /* return all members */;
-}
-
-export async function createMember(member) {
-  // TODO4: implement this function
-}
-
-export async function deleteMember(id, item) {
-  // TODO4: implement this function
+    return await response.json();
+  } catch (error) {
+    console.error("Error creating item:", error);
+    throw error;
+  }
 }

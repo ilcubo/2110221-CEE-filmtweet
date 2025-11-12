@@ -1,11 +1,8 @@
-// TODO0: change the BACKEND_URL to your EC2 public IPv4
-// Please don't use port forward (from VSCode) otherwise only you can access it.
-export const BACKEND_URL = "http://localhost:3222";
+export const BACKEND_URL = "http://34.227.111.150:3222";
 
-// TODO0: change element in MEMBERS to your group members.
-// WARNING: the _id parameters is required.
-export const MEMBERS = [
-  { name: "อติวงศ์ สุชาโต", _id: 1 },
-  { name: "โปรดปราน บุณยพุกกณะ", _id: 2 },
-  { name: "ณัฐวุฒิ หนูไฟโรจน์", _id: 3 },
+export const MEMBERS = [ //อันเก่า ไม่เกี่ยวXD 
+  { name: "Teemakorn Lakkham", _id: 1 },
+  { name: "Napas Ruttanapunyagorn", _id: 2 },
+  { name: "Navaporn Homjandee", _id: 3 },
+  { name: "Pisitpong Duangkaeo", _id: 4},
 ];
