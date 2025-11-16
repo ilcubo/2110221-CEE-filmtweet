@@ -13,7 +13,8 @@ const { Schema, model } = mongoose;
 const movieSchema = new Schema(
 	{
 		title: { type: String, required: true, trim: true },
-		categories: { type: [String], default: [] },
+		category: {type: String, required: true},
+		tags: { type: [String], default: [] },
 		// rating expected to be a numeric value (e.g. 4.2). Constrain to 0-5.
 		rating: { type: Number, min: 0, max: 5, default: 0 },
 	},
