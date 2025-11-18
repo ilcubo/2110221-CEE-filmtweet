@@ -1,4 +1,4 @@
-export const BACKEND_URL = "http://54.83.81.212:3222";
+export const BACKEND_URL = "http://localhost:3222";
 
 export const MEMBERS = [ //อันเก่า ไม่เกี่ยวXD 
   { name: "Teemakorn Lakkham", _id: 1 },
