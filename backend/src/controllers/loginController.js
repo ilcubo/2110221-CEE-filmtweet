@@ -12,13 +12,13 @@ export const registerHandler = async (req, res) => {
     }
 
     // Check if user already exists
-    const existingUser = await User.findOne({ username });
+    const existingUser = await User.findOne({ username: username });
     if (existingUser) {
       return res.status(409).json({ error: "Username already exists" });
     }
 
     // Create new user
-    const user = await User.create({ username, hashedPassword });
+    const user = await User.create({ username: username, hashedPassword: hashedPassword });
 
     res.status(201).json({ message: "User registered successfully", userId: user.id });
   } catch (error) {
@@ -35,7 +35,7 @@ export const loginHandler = async (req, res) => {
       return res.status(400).json({ error: "username and hashedPassword are required" });
     }
 
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ username: username });
     if (user == null || user.hashedPassword !== hashedPassword) {
       return res.status(401).json({ error: "Incorrect username or password" });
     }
