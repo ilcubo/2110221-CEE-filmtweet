@@ -173,3 +173,7 @@ section {
 .tag button.tag-delete-btn:hover {
   color: #000;
 }
+
+.review-card p {
+  white-space: pre-wrap;
+}

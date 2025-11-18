@@ -1,7 +1,9 @@
 import { selectedTags, initTagSelect } from "./categories.js";
-import { handleSearch, submitReview } from "./movieReviews.js";
+import { handleSearch, submitReview, getAllReviews, attachAutocomplete} from "./movieReviews.js";
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadMovieDataset();
+  
   const searchInput = document.getElementById("movie-search-input");
   const searchButton = document.getElementById("movie-search-button");
   const resultsContainer = document.getElementById("movie-reviews");
@@ -14,6 +16,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const reviewText = document.getElementById("review-text");
   const submitReviewButton = document.getElementById("submit-review");
 
+  attachAutocomplete(searchInput, document.getElementById("search-autocomplete"), MOVIE_DATASET);
+  attachAutocomplete(reviewMovieTitle, document.getElementById("review-autocomplete"), MOVIE_DATASET);
+  
   // Initialize tag selection
   initTagSelect(tagSelect, selectedTagsContainer, () => {
     handleSearch(searchInput, categorySelect, selectedTags, resultsContainer);
@@ -35,5 +40,16 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Load default reviews on page load
-  handleSearch(searchInput, categorySelect, selectedTags, resultsContainer);
+  getAllReviews(resultsContainer); 
 });
+
+export let MOVIE_DATASET = [];
+async function loadMovieDataset() {
+  try {
+    const res = await fetch("./movie.json");   // path ไปหาไฟล์ JSON ของเธอ
+    MOVIE_DATASET = await res.json();
+  } catch (e) {
+    console.error("Unable to load dataset:", e);
+    MOVIE_DATASET = [];
+  }
+}
