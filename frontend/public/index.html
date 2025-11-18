@@ -10,9 +10,70 @@
     <!-- App Header -->
     <section>
       <header>
-        <h1 id="app-name">FilmTweet</h1>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h1 id="app-name">FilmTweet</h1>
+          <div id="auth-container" style="display: flex; gap: 10px;">
+            <button id="login-button">Login</button>
+            <button id="register-button">Register</button>
+            <span id="user-info" style="display: none; align-items: center; gap: 10px;">
+              <span id="username-display"></span>
+              <button id="logout-button">Logout</button>
+            </span>
+          </div>
+        </div>
       </header>
     </section>
+
+    <!-- Login Dialog -->
+    <div id="login-dialog" class="auth-dialog" style="display: none;">
+      <div class="auth-dialog-content">
+        <div class="auth-dialog-header">
+          <h2>Login</h2>
+          <button class="close-button" data-dialog="login-dialog">&times;</button>
+        </div>
+        <form id="login-form">
+          <div class="form-group">
+            <label for="login-username">Username:</label>
+            <input type="text" id="login-username" required />
+          </div>
+          <div class="form-group">
+            <label for="login-password">Password:</label>
+            <input type="password" id="login-password" required />
+          </div>
+          <div id="login-error" class="error-message" style="display: none;"></div>
+          <button type="submit" class="auth-button">Login</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Register Dialog -->
+    <div id="register-dialog" class="auth-dialog" style="display: none;">
+      <div class="auth-dialog-content">
+        <div class="auth-dialog-header">
+          <h2>Register</h2>
+          <button class="close-button" data-dialog="register-dialog">&times;</button>
+        </div>
+        <form id="register-form">
+          <div class="form-group">
+            <label for="register-username">Username:</label>
+            <input type="text" id="register-username" required />
+          </div>
+          <div class="form-group">
+            <label for="register-password">Password:</label>
+            <input type="password" id="register-password" required />
+          </div>
+          <div class="form-group">
+            <label for="register-password-confirm">Confirm Password:</label>
+            <input type="password" id="register-password-confirm" required />
+          </div>
+          <div id="register-error" class="error-message" style="display: none;"></div>
+          <button type="submit" class="auth-button">Register</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Dialog Overlay -->
+    <div id="dialog-overlay" class="dialog-overlay" style="display: none;"></div>
 
     <!-- Movie Search Section -->
     <section>
