@@ -31,23 +31,33 @@ function updateAuthUI() {
   const registerButton = document.getElementById("register-button");
   const userInfo = document.getElementById("user-info");
   const usernameDisplay = document.getElementById("username-display");
+  const logoutButton = document.getElementById("logout-button");
 
   if (token && username) {
     loginButton.style.display = "none";
     registerButton.style.display = "none";
     usernameDisplay.textContent = `Welcome, ${username}!`;
     userInfo.style.display = "flex";
+    
+    // Attach logout handler when showing user info
+    logoutButton?.addEventListener("click", handleLogout);
   } else {
     loginButton.style.display = "block";
     registerButton.style.display = "block";
     userInfo.style.display = "none";
+    usernameDisplay.textContent = "";
   }
+}
+
+function handleLogout() {
+  localStorage.removeItem("authToken");
+  localStorage.removeItem("username");
+  updateAuthUI();
 }
 
 export function initAuth() {
   const loginButton = document.getElementById("login-button");
   const registerButton = document.getElementById("register-button");
-  const logoutButton = document.getElementById("logout-button");
   const loginForm = document.getElementById("login-form");
   const registerForm = document.getElementById("register-form");
   const closeButtons = document.querySelectorAll(".close-button");
@@ -56,11 +66,6 @@ export function initAuth() {
   // Button click handlers
   loginButton?.addEventListener("click", () => showDialog("login-dialog"));
   registerButton?.addEventListener("click", () => showDialog("register-dialog"));
-  logoutButton?.addEventListener("click", () => {
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("username");
-    updateAuthUI();
-  });
 
   // Close dialog handlers
   closeButtons.forEach((btn) => {
