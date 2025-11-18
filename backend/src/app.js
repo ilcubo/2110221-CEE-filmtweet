@@ -6,6 +6,7 @@ import * as jose from "jose";
 // import MemberRoute from "./routes/memberRoute.js";
 import MovieRoute from "./routes/movieRoute.js";
 import LoginRoute from "./routes/loginRoute.js"
+import ReviewRoute from "./routes/reviewRoute.js";
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(cors());
 // app.use("/items", ItemRoute);
 // app.use("/members", MemberRoute);
 app.use("/movies", MovieRoute);
-app.use("/login", LoginRoute);
+app.use("/login", LoginRoute);;
+app.use("/reviews", ReviewRoute);
 
 export default app;
