@@ -1,5 +1,5 @@
 import { selectedTags, initTagSelect } from "./categories.js";
-import { handleSearch, submitReview, getAllReviews, attachAutocomplete} from "./movieReviews.js";
+import { handleSearch, submitReview, getAllReviews, attachAutocomplete } from "./movieReviews.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   await loadMovieDataset();
@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const searchInput = document.getElementById("movie-search-input");
   const searchButton = document.getElementById("movie-search-button");
   const resultsContainer = document.getElementById("movie-reviews");
+  const infoContainer = document.getElementById("movie-info-container");
   const categorySelect = document.getElementById("movie-category");
   const tagSelect = document.getElementById("movie-tags");
   const selectedTagsContainer = document.getElementById("selected-tags");
@@ -21,21 +22,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   
   // Initialize tag selection
   initTagSelect(tagSelect, selectedTagsContainer, () => {
-    handleSearch(searchInput, categorySelect, selectedTags, resultsContainer);
+    handleSearch(searchInput, categorySelect, selectedTags, resultsContainer, MOVIE_DATASET, infoContainer);
   });
 
   // Search events
   searchButton?.addEventListener("click", () => {
-    handleSearch(searchInput, categorySelect, selectedTags, resultsContainer);
+    handleSearch(searchInput, categorySelect, selectedTags, resultsContainer, MOVIE_DATASET, infoContainer);
   });
   searchInput?.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") handleSearch(searchInput, categorySelect, selectedTags, resultsContainer);
+    if (e.key === "Enter") handleSearch(searchInput, categorySelect, selectedTags, resultsContainer, MOVIE_DATASET, infoContainer);
   });
 
   // Review submission
   submitReviewButton?.addEventListener("click", () => {
     submitReview(reviewMovieTitle, reviewRating, reviewText, submitReviewButton, () => {
-      handleSearch(searchInput, categorySelect, selectedTags, resultsContainer);
+      handleSearch(searchInput, categorySelect, selectedTags, resultsContainer, MOVIE_DATASET, infoContainer);
     });
   });
 

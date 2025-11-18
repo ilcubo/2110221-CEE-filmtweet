@@ -52,7 +52,8 @@ section {
 
 #movie-search-input,
 #movie-category,
-#movie-tags {
+#movie-tags,
+#review-movie-title {
   padding: 5px 10px;
   border-radius: 8px;
   border: 1px solid #aaa;
@@ -176,4 +177,78 @@ section {
 
 .review-card p {
   white-space: pre-wrap;
+}
+
+.autocomplete-container {
+  position: relative;
+}
+
+.autocomplete-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%; 
+  background: white;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  max-height: 180px;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.autocomplete-list:empty {
+  border: none;
+  padding: 0;
+  max-height: 0;
+}
+
+.autocomplete-item {
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.autocomplete-item:hover {
+  background: #ffd966;
+  color: #000;
+}
+
+/*make it support mobile and ipad screen?????*/
+@media (max-width: 768px) {
+  .review-container {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  #review-movie-title,
+  #review-rating,
+  #review-text {
+    width: 100%;
+  }
+
+  #submit-review {
+    width: 100%;
+  }
+}
+
+/* -- custom category/tag input box style -- */
+.custom-dropdown {
+  position: relative;
+  cursor: pointer;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  min-width: 200px;
+  background: white;
+}
+
+.dropdown-selected {
+  padding: 5px 10px;
+  border-radius: 8px;
+}
+
+.custom-dropdown .dropdown-list {
+  display: none;
+}
+
+.custom-dropdown.open .dropdown-list {
+  display: block;
 }
