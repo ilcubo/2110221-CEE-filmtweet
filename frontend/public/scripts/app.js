@@ -1,12 +1,19 @@
+// ===== Imports =====
+import { createAccordion } from "./accordion.js";
+
+// ===== DOM Elements =====
 const navbarToggle = document.getElementById("navbar-toggle");
 const navbarMobile = document.getElementById("navbar-mobile-menu");
-const searchButton = document.getElementById("floating-search-btn");
+const searchDialogToggle = document.getElementById("floating-search-btn");
 const searchDialog = document.getElementById("search-dialog");
+const searchDialogClose = document.getElementById("search-dialog-close");
+const searchSubmitButton = document.getElementById("search-submit-btn");
+const mainContainer = document.querySelector("main.container");
 
 var searchDialogVisible = false;
 var navbarMobileVisible = false;
 
-searchButton.addEventListener("click", () => {
+searchDialogToggle.addEventListener("click", () => {
   if (searchDialogVisible) {
     searchDialog.className = "search-dialog";
     searchDialogVisible = false;
@@ -26,9 +33,24 @@ navbarToggle.addEventListener("click", () => {
   }
 });
 
+searchDialogClose.addEventListener("click", () => {
+  searchDialog.className = "search-dialog";
+  searchDialogVisible = false;
+});
+
 window.addEventListener("resize", () => {
   if (window.innerWidth > 480) {
     navbarMobile.className = "navbar-mobile-menu";
     navbarMobileVisible = false;
   }
+});
+
+searchSubmitButton.addEventListener("click", () => {
+  searchDialog.className = "search-dialog";
+  searchDialogVisible = false;
+});
+
+// ===== Initialize Accordion =====
+document.addEventListener("DOMContentLoaded", () => {
+  createAccordion(mainContainer);
 });
