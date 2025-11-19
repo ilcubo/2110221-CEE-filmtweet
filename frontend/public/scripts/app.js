@@ -1,7 +1,11 @@
 import { selectedTags, initTagSelect } from "./categories.js";
 import { handleSearch, submitReview, getAllReviews, attachAutocomplete } from "./movieReviews.js";
+import { initAuth } from "./auth.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
+  // Initialize auth system first
+  initAuth();
+
   await loadMovieDataset();
   
   const searchInput = document.getElementById("movie-search-input");

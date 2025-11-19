@@ -1,0 +1,254 @@
+@import url("https://fonts.googleapis.com/css2?family=Mitr:wght@200;400;600&display=swap");
+
+/* --- Body & App --- */
+body {
+  font-family: "Mitr", sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f8f9fa;
+}
+
+#app-name {
+  font-size: 2em;
+  font-weight: bold;
+  margin: 0;
+  text-align: center;
+}
+
+/* --- Sections --- */
+section {
+  margin: 20px;
+}
+
+.section-title {
+  font-size: 1.2em;
+  font-weight: lighter;
+  margin: 0;
+}
+
+.section-subtitle {
+  font-size: 0.8em;
+  font-weight: lighter;
+  line-height: 80%;
+}
+
+/* --- Movie Search --- */
+.movie-search-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.movie-search-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+}
+
+.movie-search-row > div {
+  display: flex;
+  flex-direction: column;
+}
+
+#movie-search-input,
+#movie-category,
+#movie-tags,
+#review-movie-title {
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid #aaa;
+  min-width: 200px;
+}
+
+#movie-search-button {
+  height: 30px;
+  border-radius: 8px;
+  padding: 5px 10px;
+  border: 1px solid #aaa;
+  background: white;
+  cursor: pointer;
+}
+
+#movie-search-button:hover {
+  background: rgb(255, 200, 105);
+  color: white;
+}
+
+/* --- Selected Tags --- */
+#selected-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* --- Review Section --- */
+.review-container {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 16px;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.review-container input,
+.review-container select {
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+#review-movie-title {
+  flex: 2;
+}
+
+#review-rating {
+  flex: 1;
+}
+
+#review-text {
+  flex: 4;
+}
+
+#submit-review {
+  padding: 8px 16px;
+  background-color: #ffd966;
+  color: #333;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#submit-review:hover {
+  background-color: #f0c040;
+}
+
+/* --- Reviews Feed --- */
+.reviews-container {
+  margin-top: 12px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 16px;
+  min-height: 200px;
+  background: #fff;
+}
+
+#movie-reviews {
+  margin-top: 16px;
+}
+
+.message {
+  color: #6c757d;
+  text-align: center;
+}
+
+/* --- Tags Style --- */
+.tag {
+  display: inline-flex;   /* fit width to content */
+  align-items: center;
+  background-color: #ffd966;
+  color: #333;
+  font-size: 0.9em;
+  padding: 4px 8px;
+  border-radius: 16px;
+  border: 1px solid #f0c040;
+  white-space: nowrap;    /* prevent text wrapping inside a tag */
+  cursor: default;
+}
+
+.tag button.tag-delete-btn {
+  margin-left: 6px;
+  background: transparent;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  color: #555;
+  font-size: 0.9em;
+  line-height: 1;
+  padding: 0;
+}
+
+.tag button.tag-delete-btn:hover {
+  color: #000;
+}
+
+.review-card p {
+  white-space: pre-wrap;
+}
+
+.autocomplete-container {
+  position: relative;
+}
+
+.autocomplete-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%; 
+  background: white;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  max-height: 180px;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.autocomplete-list:empty {
+  border: none;
+  padding: 0;
+  max-height: 0;
+}
+
+.autocomplete-item {
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.autocomplete-item:hover {
+  background: #ffd966;
+  color: #000;
+}
+
+/*make it support mobile and ipad screen?????*/
+@media (max-width: 768px) {
+  .review-container {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  #review-movie-title,
+  #review-rating,
+  #review-text {
+    width: 100%;
+  }
+
+  #submit-review {
+    width: 100%;
+  }
+}
+
+/* -- custom category/tag input box style -- */
+.custom-dropdown {
+  position: relative;
+  cursor: pointer;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  min-width: 200px;
+  background: white;
+}
+
+.dropdown-selected {
+  padding: 5px 10px;
+  border-radius: 8px;
+}
+
+.custom-dropdown .dropdown-list {
+  display: none;
+}
+
+.custom-dropdown.open .dropdown-list {
+  display: block;
+}

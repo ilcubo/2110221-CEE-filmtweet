@@ -8,6 +8,10 @@ body {
   background: #f8f9fa;
 }
 
+* {
+  font-family: "Mitr", sans-serif;
+}
+
 #app-name {
   font-size: 2em;
   font-weight: bold;
@@ -15,58 +19,131 @@ body {
   text-align: center;
 }
 
+header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 1rem 0;
+}
+
+#app-logo {
+  width: 48px;
+  height: 48px;
+  display: block;
+}
+
+#app-name {
+  font-size: 2.5rem; /* ~40px to better match 48px logo */
+  font-weight: 600;
+  margin: 0;
+  line-height: 1;
+}
+
 /* --- Sections --- */
 section {
-  margin: 20px;
+  margin: 1.25rem; /* ~20px */
 }
 
 .section-title {
-  font-size: 1.2em;
-  font-weight: lighter;
+  font-size: 1.2rem;
+  font-weight: 400;
   margin: 0;
 }
 
 .section-subtitle {
-  font-size: 0.8em;
-  font-weight: lighter;
-  line-height: 80%;
+  font-size: 0.875rem; /* ~14px */
+  font-weight: 400;
+  line-height: 1.2;
 }
 
 /* --- Movie Search --- */
 .movie-search-container {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0.75rem; /* ~12px */
 }
 
 .movie-search-row {
   display: flex;
-  gap: 16px;
+  gap: 1rem; /* ~16px */
   align-items: flex-end;
 }
 
 .movie-search-row > div {
   display: flex;
   flex-direction: column;
+  flex: 1;
+}
+
+/* Make labels reserve the same vertical space so controls align */
+.movie-search-row > div label,
+.movie-search-container label {
+  display: block;
+  margin-bottom: 0.25rem;
+  min-height: 1.25rem; /* keeps an empty area above controls like the search button */
 }
 
 #movie-search-input,
 #movie-category,
 #movie-tags,
-#review-movie-title {
-  padding: 5px 10px;
-  border-radius: 8px;
-  border: 1px solid #aaa;
-  min-width: 200px;
+#movie-search-button,
+#review-movie-title,
+.dropdown-selected {
+  padding: 0.5rem 0.625rem; /* 8px 10px */
+  border-radius: 0.5rem; /* 8px */
+  border: 0.0625rem solid #aaa; /* 1px */
+  background: white;
+  box-sizing: border-box;
+
+  font-size: 1rem;
 }
 
+/* Normalize select sizing across platforms so they match text inputs */
+select,
+.review-container select,
+.movie-search-row select,
+#movie-category,
+#movie-tags,
+#review-rating {
+  padding: 0.5rem 0.625rem; /* same padding as inputs */
+  height: 2.75rem; /* match buttons/inputs */
+  min-height: 2.75rem;
+  line-height: 1.25;
+  box-sizing: border-box;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: white;
+  color: #333;
+  padding-right: 2.25rem; /* room for custom arrow */
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23333" viewBox="0 0 16 16"><path d="M3.204 5.672a.5.5 0 0 1 .623-.1L8 8.293l4.173-2.72a.5.5 0 1 1 .54.84l-4.4 2.866a.5.5 0 0 1-.54 0L3.28 6.412a.5.5 0 0 1-.076-.74z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 0.6rem center;
+  background-size: 1rem;
+}
+
+/* Hide IE/Edge default dropdown arrow when customizing */
+select::-ms-expand {
+  display: none;
+}
 #movie-search-button {
-  height: 30px;
-  border-radius: 8px;
-  padding: 5px 10px;
-  border: 1px solid #aaa;
-  background: white;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 2.75rem;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 0.0625rem solid #aaa;
+  background-color: white;
+  color: #333;
   cursor: pointer;
+  font-size: 1rem;
+  -webkit-tap-highlight-color: transparent;
 }
 
 #movie-search-button:hover {
@@ -78,27 +155,28 @@ section {
 #selected-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 8px;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 /* --- Review Section --- */
 .review-container {
   display: flex;
-  gap: 8px;
+  gap: 0.5rem;
   align-items: center;
-  margin-top: 16px;
+  margin-top: 1rem;
   background: #fff;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  padding: 12px;
+  border: 0.0625rem solid #dee2e6;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
 }
 
 .review-container input,
 .review-container select {
-  border: 1px solid #dee2e6;
-  border-radius: 4px;
-  padding: 8px;
+  border: 0.0625rem solid #dee2e6;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  font-size: 1rem;
 }
 
 #review-movie-title {
@@ -111,15 +189,25 @@ section {
 
 #review-text {
   flex: 4;
+  min-height: 2.25rem;
+  max-height: 12rem;
+  padding: 0.5rem;
+  border: 0.0625rem solid #dee2e6;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  resize: vertical; 
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
 #submit-review {
-  padding: 8px 16px;
+  padding: 0.5rem 1rem;
   background-color: #ffd966;
   color: #333;
   border: none;
-  border-radius: 4px;
+  border-radius: 0.25rem;
   cursor: pointer;
+  font-size: 1rem;
 }
 
 #submit-review:hover {
@@ -128,21 +216,30 @@ section {
 
 /* --- Reviews Feed --- */
 .reviews-container {
-  margin-top: 12px;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  padding: 16px;
-  min-height: 200px;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  border: 0.0625rem solid #dee2e6;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  min-height: 12.5rem; /* ~200px */
   background: #fff;
 }
 
 #movie-reviews {
-  margin-top: 16px;
+  margin-top: 1rem;
 }
 
 .message {
   color: #6c757d;
   text-align: center;
+}
+
+.review-card {
+  border: 0.0625rem solid #dee2e6;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  background: #fefefe;
 }
 
 /* --- Tags Style --- */
@@ -179,21 +276,24 @@ section {
   white-space: pre-wrap;
 }
 
-.autocomplete-container {
-  position: relative;
-}
 
-.autocomplete-list {
+.autocomplete-list,
+.custom-dropdown .dropdown-list {
   position: absolute;
   top: 100%;
   left: 0;
-  width: 100%; 
+  width: 100%;
   background: white;
-  border: 1px solid #aaa;
-  border-radius: 8px;
-  max-height: 180px;
+  border: 0.0625rem solid #aaa;
+  border-radius: 0.5rem;
+  max-height: 11.25rem; /* ~180px */
   overflow-y: auto;
   z-index: 100;
+}
+
+/* Ensure autocomplete container is positioned so the absolute list aligns correctly */
+.autocomplete-container {
+  position: relative;
 }
 
 .autocomplete-list:empty {
@@ -202,32 +302,80 @@ section {
   max-height: 0;
 }
 
-.autocomplete-item {
-  padding: 6px 10px;
+.autocomplete-item,
+.custom-dropdown .autocomplete-item {
+  padding: 0.375rem 0.625rem;
   cursor: pointer;
 }
 
-.autocomplete-item:hover {
+.autocomplete-item:hover,
+.custom-dropdown .autocomplete-item:hover {
   background: #ffd966;
   color: #000;
 }
 
-/*make it support mobile and ipad screen?????*/
+/* --- Dropdown open --- */
+.custom-dropdown.open .dropdown-list {
+  display: block;
+}
+
+
+/* --- Responsive (mobile/tablet) --- */
 @media (max-width: 768px) {
+  .movie-search-row,
   .review-container {
     flex-direction: column;
-    gap: 8px;
+    gap: 0.5rem;
   }
 
+  .movie-search-row > div,
   #review-movie-title,
   #review-rating,
-  #review-text {
-    width: 100%;
-  }
-
+  #review-text,
   #submit-review {
     width: 100%;
   }
+
+  .autocomplete-container {
+  position: relative;
+  width: 100%;
+}
+
+@media (max-width: 420px) {
+  #app-logo {
+    width: 40px;
+    height: 40px;
+  }
+  #app-name {
+    font-size: 1.75rem;
+  }
+}
+  /* Ensure controls have matching height when stacked */
+  .review-container input,
+  .review-container select,
+  .review-container textarea,
+  .review-container button {
+    min-height: 2.75rem;
+    height: 2.75rem;
+    box-sizing: border-box;
+  }
+  
+  /* Extra-specific override for the rating select in case browser defaults differ */
+  #review-rating {
+    display: block;
+    height: 2.75rem !important;
+    min-height: 2.75rem !important;
+    padding: 0.5rem 0.625rem !important;
+    box-sizing: border-box !important;
+    line-height: 1.25 !important;
+  }
+}
+
+select option {
+  background: white;
+  border: 0.0625rem solid #aaa;
+  border-radius: 0.5rem;
+  max-height: 11.25rem; /* ~180px */
 }
 
 /* -- custom category/tag input box style -- */
@@ -251,4 +399,186 @@ section {
 
 .custom-dropdown.open .dropdown-list {
   display: block;
+}
+
+/* --- Auth Dialog --- */
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.auth-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-width: 400px;
+  width: 90%;
+}
+
+.auth-dialog-content {
+  padding: 0;
+}
+
+.auth-dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.auth-dialog-header h2 {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-button:hover {
+  color: #000;
+}
+
+#login-form,
+#register-form {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: #333;
+}
+
+.form-group input {
+  padding: 8px 10px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  font-family: inherit;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #ffa726;
+  box-shadow: 0 0 4px rgba(255, 167, 38, 0.3);
+}
+
+.auth-button {
+  padding: 10px 16px;
+  background: rgb(255, 167, 38);
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1em;
+  margin-top: 8px;
+}
+
+.auth-button:hover {
+  background: rgb(255, 200, 105);
+}
+
+.error-message {
+  color: #d32f2f;
+  font-size: 0.9em;
+  padding: 8px;
+  background: #ffebee;
+  border-radius: 4px;
+}
+
+#login-button,
+#register-button {
+  padding: 8px 16px;
+  background: rgb(255, 167, 38);
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#login-button:hover,
+#register-button:hover {
+  background: rgb(255, 200, 105);
+}
+
+#user-info {
+  display: flex !important;
+  align-items: center;
+  gap: 0.5rem;  
+}
+
+#logout-button {
+  padding: 8px 16px;
+  background: #999;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#logout-button:hover {
+  background: #666;
+}
+
+/* --- top auth bar --- */
+#top-auth-bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  #top-auth-bar button {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.6rem;
+    border-radius: 0.35rem;
+  }
+
+  #top-auth-bar {
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* --- Movie Tags Layout Fix --- */
+.movie-tags {
+  display: flex;
+  flex-wrap: wrap;  /* allow tags to wrap to next line if needed */
+  gap: 6px 4px;     /* horizontal 6px, vertical 4px spacing */
+  margin-top: 4px;  /* optional spacing above the tag group */
 }
