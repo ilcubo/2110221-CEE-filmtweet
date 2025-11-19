@@ -1,13 +1,5 @@
 import mongoose from "mongoose";
 
-// Movie schema matching stored documents like:
-// {
-//   "_id": { "$oid": "6916c969d40501aac898670a" },
-//   "title": "Interstellar",
-//   "categories": ["movies","sci-fi","action"],
-//   "rating": 4.2
-// }
-
 const { Schema, model } = mongoose;
 
 const movieSchema = new Schema(

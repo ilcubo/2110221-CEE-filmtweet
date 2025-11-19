@@ -2,24 +2,34 @@
 <html>
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FilmTweet</title>
     <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
+    <!-- Top Bar for Auth Buttons -->
+    <div id="top-auth-bar">
+      <button id="login-button">Login</button>
+      <button id="register-button">Register</button>
+
+      <span id="user-info" style="display: none;">
+        <span id="username-display"></span>
+        <button id="logout-button">Logout</button>
+      </span>
+    </div>
+
     <!-- App Header -->
     <section>
       <header>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <h1 id="app-name">FilmTweet</h1>
-          <div id="auth-container" style="display: flex; gap: 10px;">
-            <button id="login-button">Login</button>
-            <button id="register-button">Register</button>
-            <span id="user-info" style="display: none; align-items: center; gap: 10px;">
-              <span id="username-display"></span>
-              <button id="logout-button">Logout</button>
-            </span>
-          </div>
+        <img id="app-logo" src="duck.svg" alt="Duck logo" />
+        <h1 id="app-name">FilmTweet</h1>
+        <div id="auth-container" style="display: flex; gap: 10px;">
+          <!-- <button id="login-button">Login</button> -->
+          <!-- <button id="register-button">Register</button> -->
+          <span id="user-info" style="display: none; align-items: center; gap: 10px;">              <span id="username-display"></span>
+            <!-- <button id="logout-button">Logout</button> -->
+          </span>
         </div>
       </header>
     </section>
@@ -93,7 +103,6 @@
               <option value="all">All Types</option>
               <option value="Movie">Movie</option>
               <option value="Animation">Animation</option>
-              <!-- <option value="series">TV Series</option> -->
             </select>
           </div>
 
@@ -128,6 +137,7 @@
           
           <!-- search button -->
           <div>
+            <label for="movie-search-button"> </label>
             <button id="movie-search-button">Search</button>
           </div>
         </div>
@@ -155,7 +165,7 @@
           <option value="2">⭐⭐</option>
           <option value="1">⭐</option>
         </select>
-        <textarea id="review-text" placeholder="Share your thoughts..." ></textarea>
+        <textarea id="review-text" placeholder="Share your thoughts..." rows="1"></textarea>
         <button id="submit-review">Post</button>
       </div>
     </section>
