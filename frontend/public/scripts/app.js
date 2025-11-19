@@ -1,17 +1,13 @@
 import { selectedTags, initTagSelect } from "./categories.js";
-import { handleSearch, submitReview, getAllReviews, attachAutocomplete } from "./movieReviews.js";
-import { initAuth } from "./auth.js";
+import { handleSearch, submitReview, getAllReviews, attachAutocomplete} from "./movieReviews.js";
+import { updateUI } from './ui.js'; // ****************** (1) เพิ่ม import นี้ ******************
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // Initialize auth system first
-  initAuth();
-
   await loadMovieDataset();
   
   const searchInput = document.getElementById("movie-search-input");
   const searchButton = document.getElementById("movie-search-button");
   const resultsContainer = document.getElementById("movie-reviews");
-  const infoContainer = document.getElementById("movie-info-container");
   const categorySelect = document.getElementById("movie-category");
   const tagSelect = document.getElementById("movie-tags");
   const selectedTagsContainer = document.getElementById("selected-tags");
@@ -26,26 +22,28 @@ document.addEventListener("DOMContentLoaded", async () => {
   
   // Initialize tag selection
   initTagSelect(tagSelect, selectedTagsContainer, () => {
-    handleSearch(searchInput, categorySelect, selectedTags, resultsContainer, MOVIE_DATASET, infoContainer);
+    handleSearch(searchInput, categorySelect, selectedTags, resultsContainer);
   });
 
   // Search events
   searchButton?.addEventListener("click", () => {
-    handleSearch(searchInput, categorySelect, selectedTags, resultsContainer, MOVIE_DATASET, infoContainer);
+    handleSearch(searchInput, categorySelect, selectedTags, resultsContainer);
   });
   searchInput?.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") handleSearch(searchInput, categorySelect, selectedTags, resultsContainer, MOVIE_DATASET, infoContainer);
+    if (e.key === "Enter") handleSearch(searchInput, categorySelect, selectedTags, resultsContainer);
   });
 
   // Review submission
   submitReviewButton?.addEventListener("click", () => {
     submitReview(reviewMovieTitle, reviewRating, reviewText, submitReviewButton, () => {
-      handleSearch(searchInput, categorySelect, selectedTags, resultsContainer, MOVIE_DATASET, infoContainer);
+      handleSearch(searchInput, categorySelect, selectedTags, resultsContainer);
     });
   });
 
   // Load default reviews on page load
   getAllReviews(resultsContainer); 
+
+  updateUI(); // ****************** (2) เรียกใช้ updateUI เมื่อโหลดเสร็จ ******************
 });
 
 export let MOVIE_DATASET = [];

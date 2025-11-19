@@ -9,74 +9,18 @@
   <body>
     <!-- App Header -->
     <section>
-      <header>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <h1 id="app-name">FilmTweet</h1>
-          <div id="auth-container" style="display: flex; gap: 10px;">
-            <button id="login-button">Login</button>
-            <button id="register-button">Register</button>
-            <span id="user-info" style="display: none; align-items: center; gap: 10px;">
-              <span id="username-display"></span>
-              <button id="logout-button">Logout</button>
-            </span>
-          </div>
-        </div>
-      </header>
+        <header class="app-header"> <h1 id="app-name">FilmTweet</h1>
+            <div class="user-controls">
+                <span id="username-display" class="user-name">Guest</span>
+                <button id="auth-button" class="btn-auth">Login</button>
+            </div>
+        </header>
     </section>
-
-    <!-- Login Dialog -->
-    <div id="login-dialog" class="auth-dialog" style="display: none;">
-      <div class="auth-dialog-content">
-        <div class="auth-dialog-header">
-          <h2>Login</h2>
-          <button class="close-button" data-dialog="login-dialog">&times;</button>
-        </div>
-        <form id="login-form">
-          <div class="form-group">
-            <label for="login-username">Username:</label>
-            <input type="text" id="login-username" required />
-          </div>
-          <div class="form-group">
-            <label for="login-password">Password:</label>
-            <input type="password" id="login-password" required />
-          </div>
-          <div id="login-error" class="error-message" style="display: none;"></div>
-          <button type="submit" class="auth-button">Login</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Register Dialog -->
-    <div id="register-dialog" class="auth-dialog" style="display: none;">
-      <div class="auth-dialog-content">
-        <div class="auth-dialog-header">
-          <h2>Register</h2>
-          <button class="close-button" data-dialog="register-dialog">&times;</button>
-        </div>
-        <form id="register-form">
-          <div class="form-group">
-            <label for="register-username">Username:</label>
-            <input type="text" id="register-username" required />
-          </div>
-          <div class="form-group">
-            <label for="register-password">Password:</label>
-            <input type="password" id="register-password" required />
-          </div>
-          <div class="form-group">
-            <label for="register-password-confirm">Confirm Password:</label>
-            <input type="password" id="register-password-confirm" required />
-          </div>
-          <div id="register-error" class="error-message" style="display: none;"></div>
-          <button type="submit" class="auth-button">Register</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Dialog Overlay -->
-    <div id="dialog-overlay" class="dialog-overlay" style="display: none;"></div>
 
     <!-- Movie Search Section -->
     <section>
+      
+
       <div class="movie-search-container">
         <div class="movie-search-row">
           <!-- Search input -->
@@ -163,14 +107,41 @@
     <!-- Reviews Feed Section -->
     <section>
       <div class="reviews-container">
-        <!-- Movie Info (title, category, tags, rating) -->
-        <div id="movie-info-container"></div>
-        <!-- Movie Reviews -->
         <div id="movie-reviews">
           <div class="message">Search for a movie to see reviews</div>
         </div>
       </div>
     </section>
+
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            
+            <div id="login-form-container">
+                <h2>Login</h2>
+                <form id="login-form">
+                    <input type="email" id="login-identifier" placeholder="Your Email" required>
+                    <input type="password" id="login-password" placeholder="Password" required>
+                    <button type="submit" class="btn-primary">Login</button>
+                    <p>Don't have an account? <a href="#" id="show-register">Register here</a></p>
+                </form>
+            </div>
+
+            <div id="register-form-container" style="display: none;">
+                <h2>Register</h2>
+                <form id="register-form">
+                    <input type="text" id="register-username" placeholder="Username" required>
+                    <input type="email" id="register-email" placeholder="Email" required>
+                    <input type="password" id="register-password" placeholder="Password" required>
+                    <button type="submit" class="btn-primary">Register</button>
+                    <p>Already have an account? <a href="#" id="show-login">Login here</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="scripts/modal.js"></script>
+    <script type="module" src="scripts/auth.js"></script>
+    <script type="module" src="scripts/ui.js"></script>
 
     <script type="module" src="scripts/app.js"></script>
   </body>

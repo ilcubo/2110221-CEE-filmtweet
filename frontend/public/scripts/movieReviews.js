@@ -17,34 +17,74 @@ export async function getAllReviews(resultsContainer) {
   }
 }
 
-// Display movie info
-export function renderMovieInfos(movie, container) {
-  if (!movie) {
-    container.innerHTML = '';
-    return;
-  }
-
-  const tagsHTML = movie.tags && movie.tags.length
-    ? `<div class="movie-tags">${movie.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>`
-    : '';
-
-  container.innerHTML = `
-    <div class="movie-card">
-      <h2>${movie.title}</h2>
-      <div class="movie-category">${movie.category}</div>
-      ${tagsHTML}
-      <div class="movie-rating">Rating: ${movie.rating.toFixed(1)}/5</div>
-    </div>
-  `;
-}
-
 // Display movie reviews
 export function renderReviews(reviews, container, titleFallback) {
   if (!reviews || reviews.length === 0) {
     container.innerHTML = '<div class="message">No reviews found</div>';
     return;
   }
+/*
+  // -------- NEW START ----------
+  // Group reviews by movie title
+  const moviesMap = new Map();
+  reviews.forEach(r => {
+    const movieKey = r.title || titleFallback || "Unknown Movie";
+    if (!moviesMap.has(movieKey)) moviesMap.set(movieKey, []);
+    moviesMap.get(movieKey).push(r);
+  });
 
+  container.innerHTML = '';
+
+  moviesMap.forEach((movieReviews, movieTitle) => {
+    const movie = movieReviews[0]; // first review to get type/tags
+
+    const movieCard = document.createElement('div');
+    movieCard.className = 'movie-card';
+
+    // Movie title
+    const titleEl = document.createElement('h3');
+    titleEl.textContent = movieTitle;
+    movieCard.appendChild(titleEl);
+
+    // Tags
+    if (movie.tags && movie.tags.length) {
+      const tagsEl = document.createElement('div');
+      tagsEl.className = 'movie-tags';
+      movie.tags.forEach(tag => {
+        const tagSpan = document.createElement('span');
+        tagSpan.className = 'tag';
+        tagSpan.textContent = tag;
+        tagsEl.appendChild(tagSpan);
+      });
+      movieCard.appendChild(tagsEl);
+    }
+
+    // Average rating
+    const avgRating = (movieReviews.reduce((sum, r) => sum + (r.rating || 0), 0) / movieReviews.length) || 0;
+    const starsEl = document.createElement('div');
+    starsEl.className = 'movie-stars';
+    starsEl.innerHTML = '⭐'.repeat(Math.round(avgRating)) + '☆'.repeat(5 - Math.round(avgRating));
+    movieCard.appendChild(starsEl);
+
+    // User reviews
+    const reviewsEl = document.createElement('div');
+    reviewsEl.className = 'reviews-list';
+    movieReviews.forEach(r => {
+      const rCard = document.createElement('div');
+      rCard.className = 'review-card';
+      rCard.innerHTML = `
+        ${r.rating ? `<div class="rating">Rating: ${r.rating}/10</div>` : ''}
+        <p>${r.text || ''}</p>
+      `;
+      reviewsEl.appendChild(rCard);
+    });
+
+    movieCard.appendChild(reviewsEl);
+    container.appendChild(movieCard);
+  });
+  // -------- NEW END ---------- */
+
+  
   container.innerHTML = reviews.map(r => `
     <div class="review-card">
       <h3>${r.title || titleFallback}</h3>
@@ -73,7 +113,7 @@ export function filterMovies(title, category, selectedTagsSet, movieDataset) {
 }
 
 // Fetch and display search results
-export async function handleSearch(searchInput, categorySelect, selectedTagsSet, resultsContainer, movieDataset, infoContainer) {
+export async function handleSearch(searchInput, categorySelect, selectedTagsSet, resultsContainer, movieDataset) {
   const title = searchInput?.value?.trim() || '';
   const category = categorySelect?.value || 'all';
   const tags = Array.from(selectedTagsSet);
@@ -84,13 +124,9 @@ export async function handleSearch(searchInput, categorySelect, selectedTagsSet,
   if (tags.length) searchInfo.push(`with tags: ${tags.join(', ')}`);
   resultsContainer.innerHTML = `<div class="message">Searching ${searchInfo.join(' ')}...</div>`;
 
-  try {
-    // Fetch movie info (for title-specific search)
-    let movie = null;
-    if (title) movie = await getMovieInfo(title);
-    if (infoContainer) renderMovieInfos(movie, infoContainer);
+  //const matchedMovies = filterMovies(title, category, selectedTagsSet, movieDataset);
 
-    // Fetch reviews
+  try {
     const reviews = await getMovieReviews({ title, category, tags });
     renderReviews(reviews, resultsContainer, title);
   } catch (error) {
@@ -172,7 +208,6 @@ export function attachAutocomplete(inputEl, listEl, movieDataset) {
     const value = inputEl.value.trim().toLowerCase();
     listEl.innerHTML = '';
     if (!value) return;
-    
     const matches = movieDataset.filter(m => m.title.toLowerCase().includes(value));
     matches.slice(0, 5).forEach(m => {
       const item = document.createElement('div');
@@ -183,6 +218,4 @@ export function attachAutocomplete(inputEl, listEl, movieDataset) {
     });
   });
 }
-
-
 

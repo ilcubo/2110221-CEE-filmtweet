@@ -1,5 +1,123 @@
 @import url("https://fonts.googleapis.com/css2?family=Mitr:wght@200;400;600&display=swap");
 
+/* --- Header & User Controls --- */
+header.app-header { /* ปรับปรุง Header ให้จัดเรียงแนวนอน */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: #fff; /* เปลี่ยนพื้นหลังให้สว่าง */
+    border-bottom: 2px solid #ffd966;
+}
+
+.user-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-name {
+    font-weight: 400;
+    color: #333;
+}
+
+.btn-auth {
+    padding: 8px 16px;
+    background-color: #ffd966;
+    color: #333;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: "Mitr", sans-serif;
+}
+
+.btn-auth:hover {
+    background-color: #f0c040;
+}
+
+/* --- Modal Styling --- */
+.modal {
+    display: none; /* ซ่อนเริ่มต้น */
+    position: fixed;
+    z-index: 1000; /* อยู่ด้านหน้าสุด */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* พื้นหลังทึบแสง */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 400px; /* ขนาด Modal */
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #000;
+    text-decoration: none;
+}
+
+/* Form Styles */
+.modal-content input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0 16px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.modal-content button.btn-primary {
+    width: 100%;
+    padding: 10px;
+    background-color: #3f51b5; /* สีน้ำเงินเข้ม */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: "Mitr", sans-serif;
+}
+
+.modal-content button.btn-primary:hover {
+    background-color: #303f9f;
+}
+
+.modal-content p {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.9em;
+}
+
+.modal-content a {
+    color: #3f51b5;
+    text-decoration: none;
+}
+
+.modal-content a:hover {
+    text-decoration: underline;
+}
+
+
 /* --- Body & App --- */
 body {
   font-family: "Mitr", sans-serif;
@@ -52,8 +170,7 @@ section {
 
 #movie-search-input,
 #movie-category,
-#movie-tags,
-#review-movie-title {
+#movie-tags {
   padding: 5px 10px;
   border-radius: 8px;
   border: 1px solid #aaa;
@@ -177,227 +294,4 @@ section {
 
 .review-card p {
   white-space: pre-wrap;
-}
-
-.autocomplete-container {
-  position: relative;
-}
-
-.autocomplete-list {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%; 
-  background: white;
-  border: 1px solid #aaa;
-  border-radius: 8px;
-  max-height: 180px;
-  overflow-y: auto;
-  z-index: 100;
-}
-
-.autocomplete-list:empty {
-  border: none;
-  padding: 0;
-  max-height: 0;
-}
-
-.autocomplete-item {
-  padding: 6px 10px;
-  cursor: pointer;
-}
-
-.autocomplete-item:hover {
-  background: #ffd966;
-  color: #000;
-}
-
-/*make it support mobile and ipad screen?????*/
-@media (max-width: 768px) {
-  .review-container {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  #review-movie-title,
-  #review-rating,
-  #review-text {
-    width: 100%;
-  }
-
-  #submit-review {
-    width: 100%;
-  }
-}
-
-/* -- custom category/tag input box style -- */
-.custom-dropdown {
-  position: relative;
-  cursor: pointer;
-  border: 1px solid #aaa;
-  border-radius: 8px;
-  min-width: 200px;
-  background: white;
-}
-
-.dropdown-selected {
-  padding: 5px 10px;
-  border-radius: 8px;
-}
-
-.custom-dropdown .dropdown-list {
-  display: none;
-}
-
-.custom-dropdown.open .dropdown-list {
-  display: block;
-}
-
-/* --- Auth Dialog --- */
-.dialog-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
-}
-
-.auth-dialog {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1000;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  max-width: 400px;
-  width: 90%;
-}
-
-.auth-dialog-content {
-  padding: 0;
-}
-
-.auth-dialog-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px;
-  border-bottom: 1px solid #dee2e6;
-}
-
-.auth-dialog-header h2 {
-  margin: 0;
-  font-size: 1.5em;
-}
-
-.close-button {
-  background: none;
-  border: none;
-  font-size: 1.5em;
-  cursor: pointer;
-  color: #666;
-  padding: 0;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.close-button:hover {
-  color: #000;
-}
-
-#login-form,
-#register-form {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.form-group label {
-  font-weight: 500;
-  color: #333;
-}
-
-.form-group input {
-  padding: 8px 10px;
-  border: 1px solid #aaa;
-  border-radius: 4px;
-  font-family: inherit;
-}
-
-.form-group input:focus {
-  outline: none;
-  border-color: #ffa726;
-  box-shadow: 0 0 4px rgba(255, 167, 38, 0.3);
-}
-
-.auth-button {
-  padding: 10px 16px;
-  background: rgb(255, 167, 38);
-  border: none;
-  border-radius: 4px;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  font-size: 1em;
-  margin-top: 8px;
-}
-
-.auth-button:hover {
-  background: rgb(255, 200, 105);
-}
-
-.error-message {
-  color: #d32f2f;
-  font-size: 0.9em;
-  padding: 8px;
-  background: #ffebee;
-  border-radius: 4px;
-}
-
-#login-button,
-#register-button {
-  padding: 8px 16px;
-  background: rgb(255, 167, 38);
-  border: none;
-  border-radius: 4px;
-  color: white;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-#login-button:hover,
-#register-button:hover {
-  background: rgb(255, 200, 105);
-}
-
-#user-info {
-  display: flex !important;
-}
-
-#logout-button {
-  padding: 8px 16px;
-  background: #999;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-#logout-button:hover {
-  background: #666;
 }

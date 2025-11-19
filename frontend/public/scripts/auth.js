@@ -1,199 +1,100 @@
-import { BACKEND_URL } from "./config.js";
+// frontend/public/scripts/auth.js
+import { loginUser, registerUser } from './api.js'; 
+import { updateUI } from './ui.js';
+import { closeModal } from './modal.js';
 
-// Simple SHA-256 hash for password hashing (client-side)
-async function hashPassword(password) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
-  return hashHex;
-}
+const loginForm = document.getElementById('login-form');
+const registerForm = document.getElementById('register-form');
 
-function showDialog(dialogId) {
-  const dialog = document.getElementById(dialogId);
-  const overlay = document.getElementById("dialog-overlay");
-  dialog.style.display = "block";
-  overlay.style.display = "block";
-}
-
-function hideDialog(dialogId) {
-  const dialog = document.getElementById(dialogId);
-  const overlay = document.getElementById("dialog-overlay");
-  dialog.style.display = "none";
-  overlay.style.display = "none";
-}
-
-function updateAuthUI() {
-  const token = localStorage.getItem("authToken");
-  const username = localStorage.getItem("username");
-  const loginButton = document.getElementById("login-button");
-  const registerButton = document.getElementById("register-button");
-  const userInfo = document.getElementById("user-info");
-  const usernameDisplay = document.getElementById("username-display");
-  const logoutButton = document.getElementById("logout-button");
-
-  if (token && username) {
-    loginButton.style.display = "none";
-    registerButton.style.display = "none";
-    usernameDisplay.textContent = `Welcome, ${username}!`;
-    userInfo.style.display = "flex";
+// ------------------------------------------
+// 1. REGISTER (พร้อม Auto-Login)
+// ------------------------------------------
+registerForm.addEventListener('submit', async (e) => {
+    e.preventDefault(); 
     
-    // Attach logout handler when showing user info
-    logoutButton?.addEventListener("click", handleLogout);
-  } else {
-    loginButton.style.display = "block";
-    registerButton.style.display = "block";
-    userInfo.style.display = "none";
-    usernameDisplay.textContent = "";
-  }
-}
+    const username = document.getElementById('register-username').value;
+    const email = document.getElementById('register-email').value; // ⭐️ ดึง email 
+    const password = document.getElementById('register-password').value; // ⭐️ ดึง password
+    
+    try {
+        const payload = { username, email, password }; 
+        
+        // 1. เรียก API ลงทะเบียน
+        await registerUser(payload); 
+        
+        // 2. ⭐⭐ ทำการล็อกอินอัตโนมัติทันที ⭐⭐
+        
+        // เตรียม Payload สำหรับ Login (ใช้ email และ password ที่เพิ่งกรอก)
+        const loginPayload = { email, password }; 
+        
+        // เรียก API Login (ใช้โค้ด Logic เดียวกับ Login Form Submit)
+        const responseData = await loginUser(loginPayload);
+        
+        const token = responseData.token; 
+        const loggedInUsername = responseData.data.user.username; // ดึงตามโครงสร้าง Postman
+        
+        if (token && loggedInUsername) { 
+            localStorage.setItem('token', token);
+            localStorage.setItem('username', loggedInUsername);
+            
+            alert(`Registration successful! Welcome, ${loggedInUsername}.`); // แจ้งเตือนต้อนรับ
+            closeModal(); // ปิด Modal
+            updateUI();   // อัปเดต UI (เปลี่ยนเป็น Logout/แสดงชื่อ)
+        } else {
+             // กรณี Backend ตอบกลับสำเร็จ แต่ไม่มี Token หรือ Username
+            alert('Registration successful, but auto-login failed: missing user data.');
+        }
 
-function handleLogout() {
-  localStorage.removeItem("authToken");
-  localStorage.removeItem("username");
-  updateAuthUI();
-}
+    } catch (error) {
+        alert(`Registration Failed: ${error.message}`);
+    }
+});
 
-export function initAuth() {
-  const loginButton = document.getElementById("login-button");
-  const registerButton = document.getElementById("register-button");
-  const loginForm = document.getElementById("login-form");
-  const registerForm = document.getElementById("register-form");
-  const closeButtons = document.querySelectorAll(".close-button");
-  const overlay = document.getElementById("dialog-overlay");
-
-  // Button click handlers
-  loginButton?.addEventListener("click", () => showDialog("login-dialog"));
-  registerButton?.addEventListener("click", () => showDialog("register-dialog"));
-
-  // Close dialog handlers
-  closeButtons.forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      const dialogId = btn.getAttribute("data-dialog");
-      hideDialog(dialogId);
-    });
-  });
-
-  overlay?.addEventListener("click", () => {
-    hideDialog("login-dialog");
-    hideDialog("register-dialog");
-  });
-
-  // Form submission handlers
-  loginForm?.addEventListener("submit", async (e) => {
+// ------------------------------------------
+// 2. LOGIN
+// ------------------------------------------
+loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    await handleLogin();
-  });
+    const email = document.getElementById('login-identifier').value; // สมมติว่า input ID ยังเป็น 'login-identifier'
+    const password = document.getElementById('login-password').value;
+    
+    try {
+        // data ที่นี่คือ Object ทั้งหมดที่คุณเห็นใน Postman
+        // { "status": "success", "token": "...", "data": { "user": { "username": "..." } } }
+        const responseData = await loginUser({ email, password }); 
+        
+        // ⭐⭐ 1. ดึง Token จาก Level 1
+        const token = responseData.token; 
+        
+        // ⭐⭐ 2. ดึง Username จาก Level 3
+        const username = responseData.data.user.username; 
 
-  registerForm?.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    await handleRegister();
-  });
+        // ตรวจสอบว่าได้ค่ามาครบถ้วนตามโครงสร้าง
+        if (token && username) { 
+            // 3. เก็บ Token และ Username 
+            localStorage.setItem('token', token);
+            localStorage.setItem('username', username);
+            
+            closeModal();
+            updateUI();   
+            
+        } else {
+            alert('Login successful, but user data (token/username) is missing from response structure.');
+        }
 
-  // Initialize UI based on stored auth state
-  updateAuthUI();
-}
-
-export function getAuthToken() {
-  return localStorage.getItem("authToken");
-}
-
-export function getUsername() {
-  return localStorage.getItem("username");
-}
-
-async function handleLogin() {
-  const username = document.getElementById("login-username").value;
-  const password = document.getElementById("login-password").value;
-  const errorDiv = document.getElementById("login-error");
-
-  try {
-    errorDiv.style.display = "none";
-    const hashedPassword = await hashPassword(password);
-
-    const response = await fetch(`${BACKEND_URL}/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, hashedPassword }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      errorDiv.textContent = data.error || "Login failed";
-      errorDiv.style.display = "block";
-      return;
+    } catch (error) {
+        alert(`Login Failed: ${error.message}`);
     }
+});
 
-    // Store token and username
-    localStorage.setItem("authToken", data.token);
-    localStorage.setItem("username", username);
-
-    // Update UI
-    updateAuthUI();
-
-    // Close dialog and reset form
-    hideDialog("login-dialog");
-    document.getElementById("login-form").reset();
-  } catch (error) {
-    errorDiv.textContent = `Error: ${error.message}`;
-    errorDiv.style.display = "block";
-  }
-}
-
-async function handleRegister() {
-  const username = document.getElementById("register-username").value;
-  const password = document.getElementById("register-password").value;
-  const confirmPassword = document.getElementById("register-password-confirm").value;
-  const errorDiv = document.getElementById("register-error");
-
-  try {
-    errorDiv.style.display = "none";
-
-    if (password !== confirmPassword) {
-      errorDiv.textContent = "Passwords do not match";
-      errorDiv.style.display = "block";
-      return;
-    }
-
-    if (password.length < 6) {
-      errorDiv.textContent = "Password must be at least 6 characters";
-      errorDiv.style.display = "block";
-      return;
-    }
-
-    const hashedPassword = await hashPassword(password);
-
-    const response = await fetch(`${BACKEND_URL}/login/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, hashedPassword }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      errorDiv.textContent = data.error || "Registration failed";
-      errorDiv.style.display = "block";
-      return;
-    }
-
-    // Show success and close dialog
-    errorDiv.textContent = "Registration successful! Please login.";
-    errorDiv.style.color = "#2e7d32";
-    errorDiv.style.background = "#e8f5e9";
-    errorDiv.style.display = "block";
-
-    // Reset form
-    document.getElementById("register-form").reset();
-
-    // Close after 2 seconds
-    setTimeout(() => {
-      hideDialog("register-dialog");
-    }, 2000);
-  } catch (error) {
-    errorDiv.textContent = `Error: ${error.message}`;
-    errorDiv.style.display = "block";
-  }
+// ------------------------------------------
+// 3. LOGOUT
+// ------------------------------------------
+export function handleLogout() {
+    // ลบ Token และข้อมูลผู้ใช้ออกจาก Local Storage
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    
+    alert('You have been logged out.');
+    updateUI(); // อัปเดต Header UI ให้กลับเป็น 'Guest'
 }
