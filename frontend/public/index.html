@@ -49,6 +49,52 @@
     <!-- Your app content goes here -->
   </main>
 
+  <!-- Floating Search Button -->
+  <button class="floating-search-btn" id="floating-search-btn" title="Search movies">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"></circle>
+      <path d="m21 21-4.35-4.35"></path>
+    </svg>
+  </button>
+
+  <!-- Search Dialog -->
+  <div class="search-dialog" id="search-dialog">
+    <div class="search-dialog-overlay" id="search-dialog-overlay"></div>
+    <div class="search-dialog-content">
+      <div class="search-dialog-header">
+        <h2>Search Movies</h2>
+        <button class="search-dialog-close" id="search-dialog-close">&times;</button>
+      </div>
+      
+      <div class="search-dialog-body">
+        <!-- Search Input -->
+        <div class="search-form-group">
+          <label for="search-title">Movie Title:</label>
+          <input type="text" id="search-title" placeholder="Enter movie title..." />
+        </div>
+
+        <!-- Category Select -->
+        <div class="search-form-group">
+          <label for="search-category">Category:</label>
+          <select id="search-category">
+            <option value="*">All Categories</option>
+            <option value="Movie">Movie</option>
+            <option value="Animation">Animation</option>
+          </select>
+        </div>
+
+        <!-- Tags Input -->
+        <div class="search-form-group">
+          <label for="search-tags">Tags (comma-separated):</label>
+          <input type="text" id="search-tags" placeholder="e.g., action, adventure, sci-fi" />
+        </div>
+
+        <!-- Search Button -->
+        <button id="search-submit-btn" class="search-submit-btn">Search</button>
+      </div>
+    </div>
+  </div>
+
   <script type="module" src="scripts/app.js"></script>
 </body>
 </html>
