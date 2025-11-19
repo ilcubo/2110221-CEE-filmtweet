@@ -1,403 +1,264 @@
-@import url("https://fonts.googleapis.com/css2?family=Mitr:wght@200;400;600&display=swap");
+/* ===== Root Colors & Typography ===== */
+:root {
+  --primary-color: #ffd966;
+  --primary-light: #f4dcb3;
+  --primary-dark: #bb7711;
+  --text-dark: #333;
+  --text-light: #666;
+  --bg-light: #f8f9fa;
+  --bg-white: #ffffff;
+  --border-color: #dee2e6;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
 
-/* --- Body & App --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-  font-family: "Mitr", sans-serif;
-  margin: 0;
-  padding: 0;
-  background: #f8f9fa;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  color: var(--text-dark);
+  background-color: var(--bg-light);
+  line-height: 1.6;
 }
 
-#app-name {
-  font-size: 2em;
-  font-weight: bold;
-  margin: 0;
-  text-align: center;
-}
-
-/* --- Sections --- */
-section {
-  margin: 20px;
-}
-
-.section-title {
-  font-size: 1.2em;
-  font-weight: lighter;
-  margin: 0;
-}
-
-.section-subtitle {
-  font-size: 0.8em;
-  font-weight: lighter;
-  line-height: 80%;
-}
-
-/* --- Movie Search --- */
-.movie-search-container {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.movie-search-row {
-  display: flex;
-  gap: 16px;
-  align-items: flex-end;
-}
-
-.movie-search-row > div {
-  display: flex;
-  flex-direction: column;
-}
-
-#movie-search-input,
-#movie-category,
-#movie-tags,
-#review-movie-title {
-  padding: 5px 10px;
-  border-radius: 8px;
-  border: 1px solid #aaa;
-  min-width: 200px;
-}
-
-#movie-search-button {
-  height: 30px;
-  border-radius: 8px;
-  padding: 5px 10px;
-  border: 1px solid #aaa;
-  background: white;
-  cursor: pointer;
-}
-
-#movie-search-button:hover {
-  background: rgb(255, 200, 105);
-  color: white;
-}
-
-/* --- Selected Tags --- */
-#selected-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-/* --- Review Section --- */
-.review-container {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  margin-top: 16px;
-  background: #fff;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  padding: 12px;
-}
-
-.review-container input,
-.review-container select {
-  border: 1px solid #dee2e6;
-  border-radius: 4px;
-  padding: 8px;
-}
-
-#review-movie-title {
-  flex: 2;
-}
-
-#review-rating {
-  flex: 1;
-}
-
-#review-text {
-  flex: 4;
-}
-
-#submit-review {
-  padding: 8px 16px;
-  background-color: #ffd966;
-  color: #333;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-#submit-review:hover {
-  background-color: #f0c040;
-}
-
-/* --- Reviews Feed --- */
-.reviews-container {
-  margin-top: 12px;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  padding: 16px;
-  min-height: 200px;
-  background: #fff;
-}
-
-#movie-reviews {
-  margin-top: 16px;
-}
-
-.message {
-  color: #6c757d;
-  text-align: center;
-}
-
-/* --- Tags Style --- */
-.tag {
-  display: inline-flex;   /* fit width to content */
-  align-items: center;
-  background-color: #ffd966;
-  color: #333;
-  font-size: 0.9em;
-  padding: 4px 8px;
-  border-radius: 16px;
-  border: 1px solid #f0c040;
-  white-space: nowrap;    /* prevent text wrapping inside a tag */
-  cursor: default;
-}
-
-.tag button.tag-delete-btn {
-  margin-left: 6px;
-  background: transparent;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-  color: #555;
-  font-size: 0.9em;
-  line-height: 1;
-  padding: 0;
-}
-
-.tag button.tag-delete-btn:hover {
-  color: #000;
-}
-
-.review-card p {
-  white-space: pre-wrap;
-}
-
-.autocomplete-container {
-  position: relative;
-}
-
-.autocomplete-list {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%; 
-  background: white;
-  border: 1px solid #aaa;
-  border-radius: 8px;
-  max-height: 180px;
-  overflow-y: auto;
-  z-index: 100;
-}
-
-.autocomplete-list:empty {
-  border: none;
-  padding: 0;
-  max-height: 0;
-}
-
-.autocomplete-item {
-  padding: 6px 10px;
-  cursor: pointer;
-}
-
-.autocomplete-item:hover {
-  background: #ffd966;
-  color: #000;
-}
-
-/*make it support mobile and ipad screen?????*/
-@media (max-width: 768px) {
-  .review-container {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  #review-movie-title,
-  #review-rating,
-  #review-text {
-    width: 100%;
-  }
-
-  #submit-review {
-    width: 100%;
-  }
-}
-
-/* -- custom category/tag input box style -- */
-.custom-dropdown {
-  position: relative;
-  cursor: pointer;
-  border: 1px solid #aaa;
-  border-radius: 8px;
-  min-width: 200px;
-  background: white;
-}
-
-.dropdown-selected {
-  padding: 5px 10px;
-  border-radius: 8px;
-}
-
-.custom-dropdown .dropdown-list {
-  display: none;
-}
-
-.custom-dropdown.open .dropdown-list {
-  display: block;
-}
-
-/* --- Auth Dialog --- */
-.dialog-overlay {
-  position: fixed;
+/* ===== Navbar Styles ===== */
+.navbar {
+  background-color: var(--bg-white);
+  box-shadow: var(--shadow);
+  position: sticky;
   top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
-}
-
-.auth-dialog {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   z-index: 1000;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  max-width: 400px;
-  width: 90%;
 }
 
-.auth-dialog-content {
-  padding: 0;
-}
-
-.auth-dialog-header {
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px;
-  border-bottom: 1px solid #dee2e6;
+  height: 70px;
 }
 
-.auth-dialog-header h2 {
+/* Logo/App Name */
+.navbar-logo {
+  flex-shrink: 0;
+}
+
+.navbar-logo h1 {
+  font-size: 1.8em;
+  font-weight: 700;
+  color: var(--primary-color);
   margin: 0;
-  font-size: 1.5em;
 }
 
-.close-button {
-  background: none;
+/* Desktop Menu */
+.navbar-menu {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.navbar-btn {
+  padding: 8px 16px;
   border: none;
-  font-size: 1.5em;
+  border-radius: 6px;
+  font-size: 0.95em;
+  font-weight: 600;
   cursor: pointer;
-  color: #666;
-  padding: 0;
-  width: 30px;
-  height: 30px;
+  transition: all 0.3s ease;
+}
+
+.navbar-btn-login {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.navbar-btn-login:hover {
+  background-color: var(--primary-dark);
+  box-shadow: 0 2px 6px rgba(230, 126, 34, 0.3);
+}
+
+.navbar-btn-register {
+  background-color: transparent;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+}
+
+.navbar-btn-register:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.navbar-btn-logout {
+  background-color: #999;
+  color: white;
+  padding: 6px 12px;
+  font-size: 0.9em;
+}
+
+.navbar-btn-logout:hover {
+  background-color: #666;
+}
+
+.navbar-user-info {
   display: flex;
   align-items: center;
-  justify-content: center;
-}
-
-.close-button:hover {
-  color: #000;
-}
-
-#login-form,
-#register-form {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
   gap: 12px;
+  color: var(--text-dark);
+  font-weight: 500;
 }
 
-.form-group {
+.navbar-user-info #username-display::before {
+  content: 'Welcome, ';
+}
+
+.navbar-user-info #username-display::after {
+  content: '!';
+}
+
+/* Hamburger Menu Icon */
+.navbar-toggle {
+  display: none;
+  flex-direction: column;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  gap: 5px;
+}
+
+.hamburger-line {
+  width: 25px;
+  height: 3px;
+  background-color: var(--text-dark);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.navbar-toggle:hover .hamburger-line {
+  background-color: var(--primary-color);
+}
+
+/* Mobile Menu (hidden by default) */
+.navbar-mobile-menu {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 20px;
+  background-color: var(--bg-light);
+  border-top: 1px solid var(--border-color);
+}
+
+.navbar-mobile-btn {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#mobile-login-btn {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+#mobile-login-btn:hover {
+  background-color: var(--primary-dark);
+}
+
+#mobile-register-btn {
+  background-color: transparent;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+}
+
+#mobile-register-btn:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+#mobile-logout-btn {
+  background-color: #999;
+  color: white;
+}
+
+#mobile-logout-btn:hover {
+  background-color: #666;
+}
+
+.navbar-mobile-user-info {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-}
-
-.form-group label {
+  gap: 8px;
+  color: var(--text-dark);
   font-weight: 500;
-  color: #333;
 }
 
-.form-group input {
-  padding: 8px 10px;
-  border: 1px solid #aaa;
-  border-radius: 4px;
-  font-family: inherit;
+.navbar-mobile-user-info #mobile-username-display::before {
+  content: 'Welcome, ';
 }
 
-.form-group input:focus {
-  outline: none;
-  border-color: #ffa726;
-  box-shadow: 0 0 4px rgba(255, 167, 38, 0.3);
+.navbar-mobile-user-info #mobile-username-display::after {
+  content: '!';
 }
 
-.auth-button {
-  padding: 10px 16px;
-  background: rgb(255, 167, 38);
-  border: none;
-  border-radius: 4px;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  font-size: 1em;
-  margin-top: 8px;
+/* ===== Responsive Design ===== */
+@media (max-width: 768px) {
+  .navbar-container {
+    height: 60px;
+  }
+
+  .navbar-logo h1 {
+    font-size: 1.4em;
+  }
+
+  /* Hide desktop menu */
+  .navbar-menu {
+    display: none;
+  }
+
+  /* Show hamburger menu */
+  .navbar-toggle {
+    display: flex;
+  }
+
+  /* Show/Hide mobile menu based on active class */
+  .navbar-mobile-menu {
+    display: none;
+  }
+
+  .navbar-mobile-menu.active {
+    display: flex;
+  }
 }
 
-.auth-button:hover {
-  background: rgb(255, 200, 105);
+@media (max-width: 480px) {
+  .navbar-container {
+    height: 56px;
+    padding: 0 15px;
+  }
+
+  .navbar-logo h1 {
+    font-size: 1.2em;
+  }
+
+  .navbar-mobile-btn {
+    padding: 10px 14px;
+    font-size: 0.95em;
+  }
 }
 
-.error-message {
-  color: #d32f2f;
-  font-size: 0.9em;
-  padding: 8px;
-  background: #ffebee;
-  border-radius: 4px;
-}
-
-#login-button,
-#register-button {
-  padding: 8px 16px;
-  background: rgb(255, 167, 38);
-  border: none;
-  border-radius: 4px;
-  color: white;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-#login-button:hover,
-#register-button:hover {
-  background: rgb(255, 200, 105);
-}
-
-#user-info {
-  display: flex !important;
-}
-
-#logout-button {
-  padding: 8px 16px;
-  background: #999;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-#logout-button:hover {
-  background: #666;
+/* ===== Main Container ===== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
