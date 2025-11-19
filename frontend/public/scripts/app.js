@@ -8,10 +8,10 @@ var navbarMobileVisible = false;
 
 searchButton.addEventListener("click", () => {
   if (searchDialogVisible) {
-    searchDialog.style = "display: none; position: static;";
+    searchDialog.className = "search-dialog";
     searchDialogVisible = false;
   } else {
-    searchDialog.style = "display: block; position: static;";
+    searchDialog.className = "search-dialog.active";
     searchDialogVisible = true;
   }
 });

@@ -335,6 +335,7 @@ body {
   max-height: 90vh;
   overflow-y: auto;
   z-index: 1101;
+  margin: auto;
 }
 
 .search-dialog-header {
