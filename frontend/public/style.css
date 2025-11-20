@@ -12,19 +12,93 @@ body {
   font-family: "Mitr", sans-serif;
 }
 
-#app-name {
-  font-size: 2em;
-  font-weight: bold;
-  margin: 0;
-  text-align: center;
+/* --- ⭐ NEW: Top Auth Bar Styling (แบบเดิมๆ แค่ย้ายที่) --- */
+#top-auth-bar {
+  /* พื้นหลังสีขาวเรียบๆ หรือโปร่งใส เพื่อไม่ให้ดูแปลกแยก */
+  background-color: transparent; 
+  padding: 0.5rem 1.5rem;
+  display: flex;
+  justify-content: flex-end; /* ดันปุ่มไปขวาสุด */
+  align-items: center;
+  /* เส้นขอบบางๆ ด้านล่าง (ถ้าชอบ) หรือเอาออกก็ได้ */
+  /* border-bottom: 1px solid #eee; */ 
 }
 
+.auth-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* ระยะห่างระหว่างปุ่ม */
+}
+
+#user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#username-display {
+  color: #333; /* สีดำปกติเหมือนเดิม */
+  font-weight: 500;
+  font-size: 0.95rem;
+  margin-right: 5px;
+}
+
+/* ปุ่มใน Top Bar (ใช้สไตล์เดิมเป๊ะๆ) */
+.top-btn {
+  padding: 8px 16px; /* ขนาดเดิม */
+  border-radius: 4px; /* ขอบมนนิดเดียวแบบเดิม */
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem; /* ปรับให้เล็กกว่าหัวข้อนิดหน่อย */
+  font-family: "Mitr", sans-serif;
+  transition: background 0.2s;
+}
+
+/* ปุ่ม Login/Register สีส้มเหลืองแบบเดิม */
+#login-button, #register-button {
+  background: rgb(255, 167, 38); /* สีส้มเหลืองเดิม */
+  color: white;
+}
+
+#login-button:hover, #register-button:hover {
+  background: rgb(255, 200, 105);
+}
+
+/* ปุ่ม My Reviews (ใช้สีเขียวที่เพิ่มใหม่) */
+#my-reviews-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+#my-reviews-button:hover {
+  background-color: #45a049;
+}
+
+/* ปุ่ม Logout (สีเทาแบบเดิม) */
+#logout-button.logout-btn {
+  background: #999; /* สีเทาเดิม */
+  color: white;
+}
+
+#logout-button.logout-btn:hover {
+  background: #666;
+}
+
+/* --- Header (เหลือแค่ Logo & Name) --- */
 header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 1rem 0;
+  justify-content: center; /* จัดกลาง */
+  padding: 0.5rem 0 1rem 0; /* ลด padding ด้านบนลงเพราะมี top bar แล้ว */
+  position: relative;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
 }
 
 #app-logo {
@@ -34,12 +108,14 @@ header {
 }
 
 #app-name {
-  font-size: 2.5rem; /* ~40px to better match 48px logo */
+  font-size: 2.5rem;
   font-weight: 600;
   margin: 0;
   line-height: 1;
+  color: #333;
 }
 
+/* ... (CSS ส่วนอื่นๆ ด้านล่างคงเดิม ไม่ต้องแก้) ... */
 /* --- Sections --- */
 section {
   margin: 1.25rem; /* ~20px */
@@ -52,7 +128,7 @@ section {
 }
 
 .section-subtitle {
-  font-size: 0.875rem; /* ~14px */
+  font-size: 0.875rem;
   font-weight: 400;
   line-height: 1.2;
 }
@@ -61,12 +137,12 @@ section {
 .movie-search-container {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem; /* ~12px */
+  gap: 0.75rem; 
 }
 
 .movie-search-row {
   display: flex;
-  gap: 1rem; /* ~16px */
+  gap: 1rem;
   align-items: flex-end;
 }
 
@@ -74,14 +150,14 @@ section {
   display: flex;
   flex-direction: column;
   flex: 1;
+  min-width: 0;
 }
 
-/* Make labels reserve the same vertical space so controls align */
 .movie-search-row > div label,
 .movie-search-container label {
   display: block;
   margin-bottom: 0.25rem;
-  min-height: 1.25rem; /* keeps an empty area above controls like the search button */
+  min-height: 1.25rem; 
 }
 
 #movie-search-input,
@@ -90,24 +166,22 @@ section {
 #movie-search-button,
 #review-movie-title,
 .dropdown-selected {
-  padding: 0.5rem 0.625rem; /* 8px 10px */
-  border-radius: 0.5rem; /* 8px */
-  border: 0.0625rem solid #aaa; /* 1px */
+  padding: 0.5rem 0.625rem;
+  border-radius: 0.5rem;
+  border: 0.0625rem solid #aaa;
   background: white;
   box-sizing: border-box;
-
   font-size: 1rem;
 }
 
-/* Normalize select sizing across platforms so they match text inputs */
 select,
 .review-container select,
 .movie-search-row select,
 #movie-category,
 #movie-tags,
 #review-rating {
-  padding: 0.5rem 0.625rem; /* same padding as inputs */
-  height: 2.75rem; /* match buttons/inputs */
+  padding: 0.5rem 0.625rem;
+  height: 2.75rem;
   min-height: 2.75rem;
   line-height: 1.25;
   box-sizing: border-box;
@@ -121,17 +195,17 @@ select {
   appearance: none;
   background-color: white;
   color: #333;
-  padding-right: 2.25rem; /* room for custom arrow */
+  padding-right: 2.25rem;
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23333" viewBox="0 0 16 16"><path d="M3.204 5.672a.5.5 0 0 1 .623-.1L8 8.293l4.173-2.72a.5.5 0 1 1 .54.84l-4.4 2.866a.5.5 0 0 1-.54 0L3.28 6.412a.5.5 0 0 1-.076-.74z"/></svg>');
   background-repeat: no-repeat;
   background-position: right 0.6rem center;
   background-size: 1rem;
 }
 
-/* Hide IE/Edge default dropdown arrow when customizing */
 select::-ms-expand {
   display: none;
 }
+
 #movie-search-button {
   -webkit-appearance: none;
   appearance: none;
@@ -221,7 +295,7 @@ select::-ms-expand {
   border: 0.0625rem solid #dee2e6;
   border-radius: 0.5rem;
   padding: 1rem;
-  min-height: 12.5rem; /* ~200px */
+  min-height: 12.5rem;
   background: #fff;
 }
 
@@ -242,9 +316,46 @@ select::-ms-expand {
   background: #fefefe;
 }
 
+/* 1. แก้ไขให้ข้อความรีวิวแสดงผลชัดเจน */
+.review-card p {
+    display: block !important;    /* บังคับให้แสดง */
+    margin-top: 12px;             /* เว้นระยะห่างจากหัวข้อ */
+    font-size: 1rem;              /* ขนาดตัวอักษร */
+    color: #333;                  /* สีเทาเข้มเกือบดำ */
+    line-height: 1.6;             /* ระยะห่างระหว่างบรรทัด */
+    white-space: pre-wrap;        /* เว้นวรรคและขึ้นบรรทัดใหม่ตามที่พิมพ์จริง */
+}
+
+/* 2. ปรับปุ่ม Edit และ Delete ให้เหมือนปุ่ม Post */
+.btn-edit, .btn-delete {
+    padding: 0.5rem 1rem;
+    background-color: #ffd966;
+    border: none;
+    border-radius: 0.25rem;
+    font-family: "Mitr", sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-left: 8px;
+    font-weight: 400;
+}
+
+.btn-edit:hover, .btn-delete:hover {
+    background-color: #f0c040;
+}
+
+.btn-edit {
+    color: #333;
+}
+
+.btn-delete {
+    color: #d32f2f !important;
+    font-weight: bold;
+}
+
+
 /* --- Tags Style --- */
 .tag {
-  display: inline-flex;   /* fit width to content */
+  display: inline-flex;
   align-items: center;
   background-color: #ffd966;
   color: #333;
@@ -252,7 +363,7 @@ select::-ms-expand {
   padding: 4px 8px;
   border-radius: 16px;
   border: 1px solid #f0c040;
-  white-space: nowrap;    /* prevent text wrapping inside a tag */
+  white-space: nowrap;
   cursor: default;
 }
 
@@ -272,11 +383,7 @@ select::-ms-expand {
   color: #000;
 }
 
-.review-card p {
-  white-space: pre-wrap;
-}
-
-
+/* ... (Autocomplete & Dropdown Styles คงเดิม) ... */
 .autocomplete-list,
 .custom-dropdown .dropdown-list {
   position: absolute;
@@ -286,12 +393,11 @@ select::-ms-expand {
   background: white;
   border: 0.0625rem solid #aaa;
   border-radius: 0.5rem;
-  max-height: 11.25rem; /* ~180px */
+  max-height: 11.25rem;
   overflow-y: auto;
   z-index: 100;
 }
 
-/* Ensure autocomplete container is positioned so the absolute list aligns correctly */
 .autocomplete-container {
   position: relative;
 }
@@ -300,6 +406,85 @@ select::-ms-expand {
   border: none;
   padding: 0;
   max-height: 0;
+}
+
+/* --- Responsive: Mobile fixes for Movie Search --- */
+@media (max-width: 600px) {
+  .movie-search-container {
+    gap: 0.5rem;
+  }
+
+  /* Stack the search row vertically on small screens */
+  .movie-search-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  /* Each control should take full width and not overflow */
+  .movie-search-row > div {
+    width: 100%;
+    flex: none;
+  }
+
+  select,
+  #movie-search-input,
+  #movie-category,
+  #movie-tags,
+  #review-movie-title,
+  .dropdown-selected {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Make the search button full width and sit under inputs */
+  #movie-search-button {
+    width: 100%;
+    height: 2.75rem;
+  }
+
+  /* Ensure dropdowns and autocomplete don't overflow off-screen */
+  .autocomplete-list,
+  .custom-dropdown .dropdown-list {
+    position: relative;
+    width: 100%;
+  }
+}
+
+/* --- Responsive: Review writing fixes for Mobile --- */
+@media (max-width: 600px) {
+  .review-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  .review-container input,
+  .review-container select,
+  #review-movie-title,
+  #review-rating,
+  #review-text,
+  #submit-review {
+    width: 100%;
+    box-sizing: border-box;
+    flex: none;
+  }
+
+  #review-movie-title { width: 100%; }
+  #review-rating { width: 100%; }
+
+  #review-text {
+    min-height: 3.5rem;
+    max-height: 10rem;
+  }
+
+  /* Make submit more prominent and full-width on phones */
+  #submit-review {
+    padding: 0.6rem 0.75rem;
+    background-color: #ffd966;
+    text-align: center;
+  }
 }
 
 .autocomplete-item,
@@ -312,93 +497,6 @@ select::-ms-expand {
 .custom-dropdown .autocomplete-item:hover {
   background: #ffd966;
   color: #000;
-}
-
-/* --- Dropdown open --- */
-.custom-dropdown.open .dropdown-list {
-  display: block;
-}
-
-
-/* --- Responsive (mobile/tablet) --- */
-@media (max-width: 768px) {
-  .movie-search-row,
-  .review-container {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .movie-search-row > div,
-  #review-movie-title,
-  #review-rating,
-  #review-text,
-  #submit-review {
-    width: 100%;
-  }
-
-  .autocomplete-container {
-  position: relative;
-  width: 100%;
-}
-
-@media (max-width: 420px) {
-  #app-logo {
-    width: 40px;
-    height: 40px;
-  }
-  #app-name {
-    font-size: 1.75rem;
-  }
-}
-  /* Ensure controls have matching height when stacked */
-  .review-container input,
-  .review-container select,
-  .review-container textarea,
-  .review-container button {
-    min-height: 2.75rem;
-    height: 2.75rem;
-    box-sizing: border-box;
-  }
-  
-  /* Extra-specific override for the rating select in case browser defaults differ */
-  #review-rating {
-    display: block;
-    height: 2.75rem !important;
-    min-height: 2.75rem !important;
-    padding: 0.5rem 0.625rem !important;
-    box-sizing: border-box !important;
-    line-height: 1.25 !important;
-  }
-}
-
-select option {
-  background: white;
-  border: 0.0625rem solid #aaa;
-  border-radius: 0.5rem;
-  max-height: 11.25rem; /* ~180px */
-}
-
-/* -- custom category/tag input box style -- */
-.custom-dropdown {
-  position: relative;
-  cursor: pointer;
-  border: 1px solid #aaa;
-  border-radius: 8px;
-  min-width: 200px;
-  background: white;
-}
-
-.dropdown-selected {
-  padding: 5px 10px;
-  border-radius: 8px;
-}
-
-.custom-dropdown .dropdown-list {
-  display: none;
-}
-
-.custom-dropdown.open .dropdown-list {
-  display: block;
 }
 
 /* --- Auth Dialog --- */
@@ -514,71 +612,4 @@ select option {
   padding: 8px;
   background: #ffebee;
   border-radius: 4px;
-}
-
-#login-button,
-#register-button {
-  padding: 8px 16px;
-  background: rgb(255, 167, 38);
-  border: none;
-  border-radius: 4px;
-  color: white;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-#login-button:hover,
-#register-button:hover {
-  background: rgb(255, 200, 105);
-}
-
-#user-info {
-  display: flex !important;
-  align-items: center;
-  gap: 0.5rem;  
-}
-
-#logout-button {
-  padding: 8px 16px;
-  background: #999;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-#logout-button:hover {
-  background: #666;
-}
-
-/* --- top auth bar --- */
-#top-auth-bar {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1.25rem;
-  box-sizing: border-box;
-}
-
-@media (max-width: 768px) {
-  #top-auth-bar button {
-    font-size: 0.75rem;
-    padding: 0.35rem 0.6rem;
-    border-radius: 0.35rem;
-  }
-
-  #top-auth-bar {
-    gap: 0.5rem;
-    padding: 0.5rem 0.75rem;
-  }
-}
-
-/* --- Movie Tags Layout Fix --- */
-.movie-tags {
-  display: flex;
-  flex-wrap: wrap;  /* allow tags to wrap to next line if needed */
-  gap: 6px 4px;     /* horizontal 6px, vertical 4px spacing */
-  margin-top: 4px;  /* optional spacing above the tag group */
 }

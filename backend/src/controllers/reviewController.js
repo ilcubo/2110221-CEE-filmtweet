@@ -1,24 +1,74 @@
-// reviewController.js (Cleaned version)
-
 import Review from "../models/reviewModel.js";
 import Movie from "../models/movieModel.js";
 
 /** @type {import("express").RequestHandler} */
 export const getReviews = async (req, res) => {
     try {
-        const { movie } = req.params; 
-        const { title } = req.query; 
+        // รับค่า title มาจาก Frontend (ซึ่ง user พิมพ์ชื่อหนัง)
+        const { title, category, tags, username } = req.query;
 
-        const movieTitleToFilter = movie || title; 
+        const pipeline = [];
+        const matchStage = {};
         
-        const filter = {};
-        
-        if (movieTitleToFilter) {
-            filter.title = movieTitleToFilter; 
-        } 
+        // 🛠️ แก้: กรองที่ field 'title' (ใน Review)
+        if (title) {
+            matchStage.title = { $regex: new RegExp(title, 'i') };
+        }
+        if (username) {
+            matchStage.username = username;
+        }
 
-        const reviews = await Review.find(filter).sort({ createdAt: -1 });
+        if (Object.keys(matchStage).length > 0) {
+            pipeline.push({ $match: matchStage });
+        }
+
+        // 🛠️ แก้: Join ด้วย field 'title'
+        pipeline.push({
+            $lookup: {
+                from: "movies",
+                localField: "title",     // ใน Review ชื่อ field title
+                foreignField: "title",   // ใน Movie ชื่อ field title
+                as: "movieDetails"
+            }
+        });
+
+        pipeline.push({ 
+            $unwind: { 
+                path: "$movieDetails", 
+                preserveNullAndEmptyArrays: true 
+            } 
+        });
+
+        // กรอง Category
+        if (category && category !== 'all' && category !== '*') {
+            pipeline.push({ $match: { "movieDetails.category": category } });
+        }
+
+        // Logic Tags (เหมือนเดิม แต่ใช้ movieDetails)
+        if (tags) {
+            const tagArray = tags.split(',').map(t => t.trim()).filter(t => t);
+            if (tagArray.length > 0) {
+                pipeline.push({
+                    $addFields: {
+                        matchScore: { $size: { $setIntersection: [ { $ifNull: ["$movieDetails.tags", []] }, tagArray ] } }
+                    }
+                });
+                pipeline.push({ $match: { matchScore: { $gt: 0 } } });
+                // เรียงตามคะแนน -> แล้วเรียงตามชื่อหนัง (title)
+                pipeline.push({ $sort: { matchScore: -1, title: 1 } });
+            }
+        } else {
+            // เนื่องจากเราปิด createdAt แล้ว เราอาจจะเรียงตาม _id (ซึ่งบอกเวลาได้เหมือนกัน) แทน
+            pipeline.push({ $sort: { _id: -1 } }); 
+        }
+
+        pipeline.push({
+            $project: { movieDetails: 0, matchScore: 0 }
+        });
+
+        const reviews = await Review.aggregate(pipeline);
         return res.status(200).json(reviews);
+
     } catch (error) {
         console.error("Error fetching reviews:", error);
         return res.status(500).json({ error: "Failed to fetch reviews." });
@@ -27,122 +77,143 @@ export const getReviews = async (req, res) => {
 
 /** @type {import("express").RequestHandler} */
 export const createReview = async (req, res) => {
+    
     try {
-        const { title, review, rating } = req.body; 
+        const { movie, comment, rating } = req.body;
         const username = req.user?.username; 
 
-        // 1. INPUT VALIDATION
-        if (!title) { 
-            return res.status(400).json({ error: "Movie title is required." });
-        }
-        if (!username) {
-            return res.status(401).json({ error: "User not authenticated." });
-        }
-        if (rating === undefined || rating === null) {
-            return res.status(400).json({ error: "Rating is required." });
-        }
-        if (typeof rating !== 'number' || rating < 0 || rating > 5) {
-            return res.status(400).json({ error: "Rating must be a number between 0 and 5." });
-        }
+        if (!movie) return res.status(400).json({ error: "Movie title is required." });
+        if (!username) return res.status(401).json({ error: "User not authenticated." });
+        if (rating === undefined || rating === null) return res.status(400).json({ error: "Rating is required." });
+        if (typeof rating !== 'number' || rating < 0 || rating > 5) return res.status(400).json({ error: "Rating must be a number between 0 and 5." });
 
-        // 2. CHECK IF MOVIE EXISTS
-        const movieDoc = await Movie.findOne({ title: title });
-        if (!movieDoc) {
-            return res.status(400).json({ error: "Movie not found." });
-        }
+        //ตรวจสอบว่ามีหนังชื่อนี้ใน Movies Collection จริงไหม
+        const movieDoc = await Movie.findOne({ title: movie });
+        if (!movieDoc) return res.status(400).json({ error: "Movie not found in database." });
 
-        // 3. PREVENT DUPLICATE REVIEWS (Concurrency check - also enforced by Mongoose index)
-        const existingReview = await Review.findOne({ username, title }); 
-        if (existingReview) {
-            return res.status(409).json({ error: "You have already reviewed this movie." });
-        }
+        //ตรวจสอบว่าเคยรีวิวหนัง "title" นี้ไปหรือยัง
+        const existingReview = await Review.findOne({ username, title: movie });
+        if (existingReview) return res.status(409).json({ error: "You have already reviewed this movie." });
 
-        // 4. CREATE THE REVIEW
-        const newReview = await Review.create({
+        //สร้างรีวิว
+        const review = await Review.create({
             username,
-            title,
-            review: review, // review is now guaranteed to be a string or undefined, which defaults to "" in the Model
+            title: movie, // ✅ บันทึกชื่อหนังลงใน field 'title'
+            review: comment || "",
             rating,
         });
 
-        // 5. ATOMICALLY UPDATE MOVIE RATING (The critical fix)
-        const result = await Review.aggregate([
-            { $match: { title: title } }, 
-            { $group: { _id: null, avgRating: { $avg: "$rating" } } } 
-        ]);
+        await updateMovieRating(movie); 
 
-        const newAvgRating = result.length > 0 ? result[0].avgRating : 0;
-        const finalRating = Math.round(newAvgRating * 10) / 10; // Round to 1 decimal place
-
-        // Update the movie's rating atomically
-        await Movie.updateOne(
-            { title: title },
-            { rating: finalRating }
-        );
-
-        return res.status(201).json({
-            review: newReview,
-            movieRating: finalRating,
-        });
+        return res.status(201).json({ review });
     } catch (error) {
+        // ... (Error handling เดิม)
         console.error("Error creating review:", error);
-        // Handle Mongoose Duplicate Key Error (E11000) from the compound index
-        if (error.code === 11000) {
-            return res.status(409).json({ error: "You have already reviewed this movie." });
-        }
-        if (error.name === 'ValidationError') {
-            return res.status(400).json({ error: error.message });
-        }
         return res.status(500).json({ error: "Internal server error." });
+    }
+};
+
+/** @type {import("express").RequestHandler} */
+export const updateReview = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { comment, rating } = req.body;
+        const username = req.user?.username;
+
+        const reviewData = await Review.findById(id);
+        if (!reviewData) return res.status(404).json({ error: "Review not found." });
+
+        if (reviewData.username !== username) {
+            return res.status(403).json({ error: "Not authorized." });
+        }
+
+        if (comment !== undefined) reviewData.review = comment;
+        if (rating !== undefined) reviewData.rating = rating;
+        
+        await reviewData.save();
+
+        // 🛠️ ส่ง title ไปคำนวณ
+        await updateMovieRating(reviewData.title); 
+
+        res.status(200).json({ message: "Updated", review: reviewData });
+
+    } catch (error) {
+        res.status(500).json({ error: "Failed to update." });
     }
 };
 
 /** @type {import("express").RequestHandler} */
 export const deleteReview = async (req, res) => {
     try {
-        const { id } = req.params; // Review ID from URL parameter
-        const username = req.user?.username; // Username from verifyToken middleware
+        const { id } = req.params;
+        const username = req.user?.username;
 
-        if (!username) {
-            return res.status(401).json({ error: "User not authenticated." });
+        const review = await Review.findById(id);
+        if (!review) return res.status(404).json({ error: "Review not found." });
+
+        if (review.username !== username) {
+            return res.status(403).json({ error: "Not authorized." });
         }
+
+        // 🛠️ เก็บชื่อหนังจาก field 'title'
+        const movieTitle = review.title; 
         
-        // 1. Find and check ownership of the review
-        const reviewToDelete = await Review.findById(id);
-
-        if (!reviewToDelete) {
-            return res.status(404).json({ error: "Review not found." });
-        }
-
-        // Check if the authenticated user is the one who wrote the review
-        if (reviewToDelete.username !== username) {
-            // Using 403 Forbidden status code
-            return res.status(403).json({ error: "You are not authorized to delete this review." });
-        }
-
-        const movieTitle = reviewToDelete.title;
-
-        // 2. Delete the review
         await Review.deleteOne({ _id: id });
-        
-        // 3. Recalculate and update the movie's average rating
-        const result = await Review.aggregate([
-            { $match: { title: movieTitle } }, // Filter reviews for this movie
-            { $group: { _id: null, avgRating: { $avg: "$rating" } } } // Calculate average rating
-        ]);
+        await updateMovieRating(movieTitle);
 
-        const newAvgRating = result.length > 0 ? result[0].avgRating : 0;
-        const finalRating = Math.round(newAvgRating * 10) / 10;
+        res.status(200).json({ message: "Deleted successfully." });
 
-        // Update the movie's rating atomically
-        await Movie.updateOne(
-            { title: movieTitle },
-            { rating: finalRating }
-        );
-
-        return res.status(200).json({ message: "Review deleted successfully.", movieRating: finalRating });
     } catch (error) {
-        console.error("Error deleting review:", error);
-        return res.status(500).json({ error: "Internal server error." });
+        res.status(500).json({ error: "Failed to delete." });
     }
 };
+
+/** @type {import("express").RequestHandler} */
+export const recalculateAllRatings = async (req, res) => {
+    try {
+        console.log("--- Starting Batch Recalculation ---");
+        
+        // 1. หาชื่อหนังทั้งหมดที่มีรีวิว (ดูจากฟิลด์ title นะครับ)
+        const uniqueTitles = await Review.distinct("title");
+        console.log(`Found reviews for ${uniqueTitles.length} movies.`);
+
+        // 2. วนลูปสั่งคำนวณใหม่ทีละเรื่อง
+        let count = 0;
+        for (const title of uniqueTitles) {
+            await updateMovieRating(title); // เรียก Helper ตัวเก่งของเรา
+            count++;
+        }
+
+        console.log("--- Recalculation Finished ---");
+        res.status(200).json({ message: `Updated ratings for ${count} movies.` });
+
+    } catch (error) {
+        console.error("Recalculation error:", error);
+        res.status(500).json({ error: "Failed to recalculate." });
+    }
+};
+
+// --- Helper Function (วางไว้ล่างสุดของไฟล์) ---
+async function updateMovieRating(movieTitle) {
+    console.log("--- Debugging Rating Calculation ---");
+    console.log("1. Calculating rating for movie:", movieTitle);
+
+    const result = await Review.aggregate([
+        // 👇 ต้องเป็น title นะครับ
+        { $match: { title: movieTitle } }, 
+        { $group: { _id: null, avgRating: { $avg: "$rating" } } }
+    ]);
+
+    console.log("2. Aggregation Result:", JSON.stringify(result));
+
+    const newAvgRating = result.length > 0 ? result[0].avgRating : 0;
+    console.log("3. New Average Rating:", newAvgRating);
+
+    const updateResult = await Movie.updateOne(
+        { title: movieTitle },
+        { rating: Math.round(newAvgRating * 10) / 10 }
+    );
+    
+    console.log("4. Update Result:", updateResult);
+    console.log("------------------------------------");
+}

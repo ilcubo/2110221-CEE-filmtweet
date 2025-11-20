@@ -27,31 +27,46 @@ function hideDialog(dialogId) {
 }
 
 function updateAuthUI() {
+  // 1. ดึงค่า Token (ต้องใช้ชื่อ 'authToken' ให้ตรงกับตอน Login)
   const token = localStorage.getItem("authToken");
   const username = localStorage.getItem("username");
+
+  // ดึง Element ต่างๆ
   const loginButton = document.getElementById("login-button");
   const registerButton = document.getElementById("register-button");
   const userInfo = document.getElementById("user-info");
   const usernameDisplay = document.getElementById("username-display");
   const logoutButton = document.getElementById("logout-button");
+  
+  // ⭐ เพิ่มตัวแปรนี้: กล่องเขียนรีวิว
+  const reviewContainer = document.querySelector(".review-container");
 
   if (token && username) {
+    // --- กรณี: ล็อกอินแล้ว ---
     if (loginButton) loginButton.style.display = "none";
     if (registerButton) registerButton.style.display = "none";
+    
     if (usernameDisplay) usernameDisplay.textContent = `Welcome, ${username}!`;
     if (userInfo) userInfo.style.display = "flex";
 
-    // Attach logout handler when showing user info (ensure it's only added once if possible)
+    // ⭐ แสดงกล่องเขียนรีวิว
+    if (reviewContainer) reviewContainer.style.display = "flex"; 
+
+    // ผูกปุ่ม Logout (ป้องกันการผูกซ้ำ)
     if (logoutButton) {
-        // Remove previous listener to prevent duplicates
         logoutButton.removeEventListener("click", handleLogout);
         logoutButton.addEventListener("click", handleLogout);
     }
   } else {
+    // --- กรณี: ยังไม่ล็อกอิน (Guest) ---
     if (loginButton) loginButton.style.display = "block";
     if (registerButton) registerButton.style.display = "block";
+    
     if (userInfo) userInfo.style.display = "none";
     if (usernameDisplay) usernameDisplay.textContent = "";
+
+    // ⭐ ซ่อนกล่องเขียนรีวิว
+    if (reviewContainer) reviewContainer.style.display = "none"; 
   }
 }
 
@@ -229,21 +244,37 @@ async function handleRegister() {
       return;
     }
 
-    // Show success and close dialog
-    errorDiv.textContent = "Registration successful! Please login.";
-    errorDiv.style.color = "#2e7d32";
-    errorDiv.style.background = "#e8f5e9";
-    errorDiv.style.display = "block";
+    const loginResponse = await fetch(`${BACKEND_URL}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, hashedPassword }),
+    });
 
-    // Reset form
+    const loginData = await loginResponse.json();
+
+    //Checking login after register
+    if (!loginResponse.ok || !loginData.token) {
+         //Error when register but not login
+        throw new Error(loginData.error || "Registration successful, but auto-login failed.");
+    }
+
+    //collect Token
+    localStorage.setItem("authToken", loginData.token);
+    localStorage.setItem("username", username);
+
+    // update Header
+    updateAuthUI();
+    
+   // Close after successful register
+    hideDialog("register-dialog");
     document.getElementById("register-form")?.reset();
 
-    // Close after 2 seconds
-    setTimeout(() => {
-      hideDialog("register-dialog");
-    }, 2000);
+    // clear form
+    document.getElementById("register-form")?.reset();
+
   } catch (error) {
     errorDiv.textContent = `Error: ${error.message}`;
     errorDiv.style.display = "block";
   }
+
 }

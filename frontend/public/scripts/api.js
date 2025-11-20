@@ -1,5 +1,4 @@
 import { BACKEND_URL } from "./config.js";
-import { getAuthToken } from "./auth.js";
 
 export async function getItems() {
   const items = await fetch(`${BACKEND_URL}/items`).then((r) => r.json());
@@ -65,40 +64,40 @@ export async function createItem(payload) {
     console.error("Error creating item:", error);
     throw error;
   }
+} // <--- ✅ เติม } ตรงนี้เพื่อปิดฟังก์ชัน createItem ครับ
+
+// Helper เพื่อดึง Token
+function getAuthHeaders() {
+    const token = localStorage.getItem('authToken');
+    return token ? { 
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}` 
+    } : { "Content-Type": "application/json" };
 }
 
-export async function deleteReview(reviewId) {
-    const token = getAuthToken();
-    if (!token) {
-        throw new Error("Authentication token not found.");
-    }
+export async function updateReview(reviewId, payload) {
+    const response = await fetch(`${BACKEND_URL}/reviews/${reviewId}`, {
+        method: "PUT",
+        headers: getAuthHeaders(),
+        body: JSON.stringify(payload), // { comment: "...", rating: 5 }
+    });
 
-    // 🎯 FIX: Declare 'response' with 'let' here so it's accessible outside the try block
-    let response; 
-    
-    try {
-        response = await fetch(`${BACKEND_URL}/reviews/${reviewId}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-        });
-    } catch (error) {
-        // Handle network errors (e.g., server offline, timeout)
-        throw new Error(`Network error while deleting review: ${error.message}`);
-    }
-    
     if (!response.ok) {
-        const errorData = await response.json();
-        const errorMessage = errorData.error || `Failed to delete review. Status: ${response.status}`;
-        
-        if (errorMessage.includes("Token expired")) {
-            console.warn("Token expired. User must re-authenticate.");
-            throw new Error("Session expired. Please log in again to delete reviews.");
-        }
-        
-        throw new Error(errorMessage);
+        const data = await response.json();
+        throw new Error(data.error || "Failed to update review");
     }
+    return await response.json();
+}
 
-    return response.json();
+export async function deleteReviewAPI(reviewId) { // ตั้งชื่อไม่ให้ซ้ำกับ controller
+    const response = await fetch(`${BACKEND_URL}/reviews/${reviewId}`, {
+        method: "DELETE",
+        headers: getAuthHeaders(),
+    });
+
+    if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Failed to delete review");
+    }
+    return await response.json();
 }

@@ -8,32 +8,33 @@
   </head>
 
   <body>
-    <!-- Top Bar for Auth Buttons -->
+    <!-- ⭐ Top Auth Bar (แบบเรียบง่าย เข้ากับธีมเดิม) -->
     <div id="top-auth-bar">
-      <button id="login-button">Login</button>
-      <button id="register-button">Register</button>
+      <div class="auth-actions">
+        <!-- ปุ่มสำหรับ Guest -->
+        <button id="login-button" class="top-btn">Login</button>
+        <button id="register-button" class="top-btn">Register</button>
 
-      <span id="user-info" style="display: none;">
-        <span id="username-display"></span>
-        <button id="logout-button">Logout</button>
-      </span>
+        <!-- ส่วนแสดงผลเมื่อ Login แล้ว -->
+        <span id="user-info" style="display: none;">
+          <span id="username-display"></span>
+          <button id="my-reviews-button" class="top-btn">My Reviews</button>
+          <button id="logout-button" class="top-btn logout-btn">Logout</button>
+        </span>
+      </div>
     </div>
 
-    <!-- App Header -->
+    <!-- App Header (Logo & Name) -->
     <section>
       <header>
-        <img id="app-logo" src="duck.svg" alt="Duck logo" />
-        <h1 id="app-name">FilmTweet</h1>
-        <div id="auth-container" style="display: flex; gap: 10px;">
-          <!-- <button id="login-button">Login</button> -->
-          <!-- <button id="register-button">Register</button> -->
-          <span id="user-info" style="display: none; align-items: center; gap: 10px;">              <span id="username-display"></span>
-            <!-- <button id="logout-button">Logout</button> -->
-          </span>
+        <div class="logo-container">
+            <img id="app-logo" src="duck.svg" alt="Duck logo" />
+            <h1 id="app-name">FilmTweet</h1>
         </div>
       </header>
     </section>
 
+    <!-- ... (Login/Register Dialogs และส่วนอื่นๆ เหมือนเดิมทุกประการ) ... -->
     <!-- Login Dialog -->
     <div id="login-dialog" class="auth-dialog" style="display: none;">
       <div class="auth-dialog-content">
@@ -103,6 +104,7 @@
               <option value="all">All Types</option>
               <option value="Movie">Movie</option>
               <option value="Animation">Animation</option>
+              <!-- <option value="series">TV Series</option> -->
             </select>
           </div>
 

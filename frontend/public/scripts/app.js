@@ -1,6 +1,6 @@
 import { selectedTags, initTagSelect } from "./categories.js";
-import { handleSearch, submitReview, getAllReviews, attachAutocomplete } from "./movieReviews.js";
-import { initAuth } from "./auth.js";
+import { initAuth, getUsername } from "./auth.js";
+import { handleSearch, submitReview, getAllReviews, attachAutocomplete, loadMyReviews } from "./movieReviews.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Initialize auth system first
@@ -20,6 +20,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const reviewRating = document.getElementById("review-rating");
   const reviewText = document.getElementById("review-text");
   const submitReviewButton = document.getElementById("submit-review");
+
+  // เพิ่มตัวแปรปุ่ม My Reviews
+  const myReviewsButton = document.getElementById("my-reviews-button");
 
   attachAutocomplete(searchInput, document.getElementById("search-autocomplete"), MOVIE_DATASET);
   attachAutocomplete(reviewMovieTitle, document.getElementById("review-autocomplete"), MOVIE_DATASET);
@@ -46,9 +49,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Load default reviews on page load
   getAllReviews(resultsContainer); 
+
+  // เพิ่ม Event Listener สำหรับปุ่ม My Reviews
+  myReviewsButton?.addEventListener("click", () => {
+    loadMyReviews(resultsContainer);
+  });
+
 });
 
+// ส่วน export ต้องอยู่นอก document.addEventListener
 export let MOVIE_DATASET = [];
+
 async function loadMovieDataset() {
   try {
     const res = await fetch("./movie.json");   // path ไปหาไฟล์ JSON ของเธอ
